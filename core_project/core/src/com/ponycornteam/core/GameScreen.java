@@ -177,8 +177,6 @@ public class GameScreen implements Screen, InputProcessor{
     @Override
     public void dispose() {
     	cursorImage.dispose();
-        dropImage.dispose();
-        bucketImage.dispose();
         dropSound.dispose();
         rainMusic.dispose();
     }
