@@ -49,9 +49,7 @@ public class GameScreen implements Screen, InputProcessor{
         this.game = gam;
 
         Texture.setEnforcePotImages(false);
-        // Chargement des images
-        dropImage =  game.manager.get("data/droplet.png", Texture.class);
-        bucketImage =  game.manager.get("data/bucket.png", Texture.class);
+
 
         //Chargement des sons et musiques 
         dropSound =  game.manager.get("data/drop.wav", Sound.class);
