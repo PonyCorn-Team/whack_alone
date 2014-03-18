@@ -268,8 +268,8 @@ public class GameScreen implements Screen, InputProcessor{
 	@Override
 	public boolean mouseMoved(int screenX, int screenY) {
 		posX = screenX; 
-		posY = screenY; 
-		//System.out.println("screenX = " + screenX + "  screenY = " + screenY );
+		posY = screenY;
+		//System.out.println("screenX = " + screenX + "  screenY = " + screenY + " Angle = " + com.ponycornteam.tools.Trigo.angleCalc(400, 240, screenX, screenY));
 		return false;
 	}
 
