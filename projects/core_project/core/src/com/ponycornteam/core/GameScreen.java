@@ -29,11 +29,24 @@ public class GameScreen implements Screen, InputProcessor{
     private OrthographicCamera camera;
     
     
+    private Music music; 
+    
+    private Array<Sound>  sAie;
+    private Array<Sound>  sAieWoman;
+    private Array<Sound>  sPaf;
+    
+    private Sound dead;
+    private Sound a;
+    private Sound b; 
+    
+    
     
     Sound dropSound;
     Music rainMusic;
     
 
+    
+    
     int dropsGathered;
 
     
