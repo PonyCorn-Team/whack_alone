@@ -22,6 +22,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
+import com.ponycornteam.core.objects.ICharacter;
 import com.ponycornteam.core.objects.Player;
 import com.ponycornteam.tools.Coord;
 
@@ -32,7 +33,7 @@ public class GameScreen implements Screen, InputProcessor{
     //private Texture playerImage; 
     
     private Sprite spritePlayer; 
-    private Player player;
+    private ICharacter player;
     private OrthographicCamera camera;
     
     
@@ -44,7 +45,8 @@ public class GameScreen implements Screen, InputProcessor{
     
     private Sound deadSound;
     private Sound bounceSound;
-    private Sound shootSound; 
+    private Sound shootSound;
+    private Player p;
     
     
     
@@ -117,8 +119,8 @@ public class GameScreen implements Screen, InputProcessor{
 
 
         // create a Rectangle to logically represent the bucket
-         player = new Player(game.manager.get("game/01.png", Texture.class), new Coord(800 / 2 - 64 / 2, 20));
-
+        p = new Player(game.manager.get("game/01.png", Texture.class), new Coord(800 / 2 - 64 / 2, 20)); 
+        player = p;
         // create the raindrops array and spawn the first raindrop
         //raindrops = new Array<Rectangle>();
 
