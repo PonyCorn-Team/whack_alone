@@ -23,6 +23,10 @@ public class GameScreen implements Screen, InputProcessor{
     final Core game;
 
     private Texture cursorImage; 
+    private Texture playerImage; 
+    
+    Rectangle player;
+    
     
     
     Texture dropImage;
@@ -36,8 +40,9 @@ public class GameScreen implements Screen, InputProcessor{
     int dropsGathered;
 
     
-    int posX = 0; 
-    int posY = 0; 
+    
+    int posX = 0, playerX = 0; 
+    int posY = 0, playerY = 0; 
     int cursorWidth = 0; 
     int cursorHeight = 0; 
     
@@ -59,20 +64,20 @@ public class GameScreen implements Screen, InputProcessor{
 
 
         // create a Rectangle to logically represent the bucket
-       // bucket = new Rectangle();
-       // bucket.x = 800 / 2 - 64 / 2; // center the bucket horizontally
-        //bucket.y = 20; // bottom left corner of the bucket is 20 pixels above
+         player = new Rectangle();
+         player.x = 800 / 2 - 64 / 2; // center the bucket horizontally
+         player.y = 20; // bottom left corner of the bucket is 20 pixels above
                         // the bottom screen edge
-       // bucket.width = 64;
-       // bucket.height = 64;
+         player.width = 64;
+         player.height = 64;
 
         // create the raindrops array and spawn the first raindrop
-        raindrops = new Array<Rectangle>();
+        //raindrops = new Array<Rectangle>();
 
         
-        
+        playerImage = game.manager.get("game/01.png", Texture.class);
         cursorImage = game.manager.get("game/cursor4040.png", Texture.class); 
-       
+         
         cursorWidth = cursorImage.getWidth(); 
         cursorHeight = cursorImage.getHeight(); 
         
@@ -111,6 +116,8 @@ public class GameScreen implements Screen, InputProcessor{
         
         game.batch.draw(cursorImage, posX - (cursorWidth / 2), game.HEIGH - posY - (cursorHeight / 2));
         
+        game.batch.draw(playerImage, player.x, player.y);
+        
         game.batch.end();
 
         
@@ -118,9 +125,35 @@ public class GameScreen implements Screen, InputProcessor{
         boolean leftPressed = Gdx.input.isButtonPressed(Input.Buttons.LEFT);
         boolean rightPressed = Gdx.input.isButtonPressed(Input.Buttons.RIGHT);
 
-       // System.out.println("leftpressed = " + leftPressed + "  rightPressed = " + rightPressed );
+        if(Gdx.input.isButtonPressed(Input.Buttons.LEFT)){
+        	
+        }
+        
+        if(Gdx.input.isButtonPressed(Input.Buttons.RIGHT)){
+        	
+        }
+        
+        if (Gdx.input.isKeyPressed(Keys.ESCAPE))
+        	 Gdx.app.exit();
+        
+        if (Gdx.input.isKeyPressed(Keys.LEFT))
+            player.x -= 200 * Gdx.graphics.getDeltaTime();
+        if (Gdx.input.isKeyPressed(Keys.RIGHT))
+        	player.x += 200 * Gdx.graphics.getDeltaTime();
+        if (Gdx.input.isKeyPressed(Keys.DOWN))
+            player.y -= 200 * Gdx.graphics.getDeltaTime();
+        if (Gdx.input.isKeyPressed(Keys.UP))
+        	player.y += 200 * Gdx.graphics.getDeltaTime();
         //fpsLogger.log();
         
+        if (player.x < 0)
+        	player.x = 0;
+        if (player.x > game.WIDTH - 64)
+        	player.x = game.WIDTH - 64;
+        if (player.y < 0)
+        	player.y = 0;
+        if (player.y > game.HEIGH - 64)
+        	player.y = game.HEIGH - 64;
     }
 
     @Override
