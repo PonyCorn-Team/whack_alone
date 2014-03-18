@@ -133,6 +133,8 @@ public class MainMenuScreen implements Screen {
 
 	@Override
 	public void dispose() {
+		music.stop();
+		music.dispose();
 		stage.dispose();
 		skin.dispose();
 	}
