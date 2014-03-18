@@ -27,14 +27,29 @@ public class LoadingScreen implements Screen {
     	empty=new NinePatch(new TextureRegion(textempty,24,24),8,8,8,8);
     	full=new NinePatch(new TextureRegion(textfull,24,24),8,8,8,8);
 
-    	game.manager.load("game/01.png",Texture.class);
+    	
     	game.manager.load("splash/wall.png",Texture.class);
+    	//Menu 
+    	game.manager.load("menu/menu.wav",Music.class);
+    	
+    	//Jeu
+    	
+    		//Music
+    	
+    		//Sounds
+    	
+    		//Pictures
+    	game.manager.load("game/01.png",Texture.class);
     	game.manager.load("game/cursor4040.png", Texture.class);
+    	
+    	
+    	
     	game.manager.load("data/bucket.png", Texture.class);
     	game.manager.load("data/droplet.png",Texture.class);
     	game.manager.load("data/drop.wav",Sound.class);
     	game.manager.load("data/rain.mp3",Music.class);
-
+    	
+    	
     	Texture.setEnforcePotImages(false);
     	
     }
