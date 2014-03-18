@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
@@ -28,6 +29,7 @@ public class GameScreen implements Screen, InputProcessor{
     private Texture cursorImage; 
     private Texture playerImage; 
     
+    private Sprite spritePlayer; 
     private Rectangle player;
     private OrthographicCamera camera;
     
@@ -126,9 +128,9 @@ public class GameScreen implements Screen, InputProcessor{
          loadSoundAie();
          loadSoundAieWoman();
          loadSoundPaf(); 
-          deadSound =  game.manager.get("game/dead.wav", Sound.class);
-          bounceSound =  game.manager.get("game/bounce.wav", Sound.class);
-          shootSound =  game.manager.get("game/shoot.wav", Sound.class); 
+         deadSound =  game.manager.get("game/dead.wav", Sound.class);
+         bounceSound =  game.manager.get("game/bounce.wav", Sound.class);
+         shootSound =  game.manager.get("game/shoot.wav", Sound.class); 
          
          
         playerImage = game.manager.get("game/01.png", Texture.class);
@@ -169,24 +171,31 @@ public class GameScreen implements Screen, InputProcessor{
         
         stateTime += Gdx.graphics.getDeltaTime();           // #15
         currentFrame = walkAnimation.getKeyFrame(stateTime, true);  
+        
+        
+        spritePlayer = (isMoving) ? new Sprite(currentFrame) : new Sprite(playerImage);
+        spritePlayer.setPosition(player.x, player.y);
+        spritePlayer.setRotation((float) com.ponycornteam.tools.Trigo.angleCalc(player.x, player.y, posX, posY));
         // begin a new batch and draw the bucket and
         // all drops
         game.batch.begin();
         
         game.font.draw(game.batch, "Drops Collected: " + dropsGathered, 0, 480);
-        if(isMoving)
-        	game.batch.draw(currentFrame, player.x, player.y);  
-        else
-        	game.batch.draw(playerImage, player.x, player.y);
+//        if(isMoving)
+//        	game.batch.draw(currentFrame, player.x, player.y);  
+//        else
+//        	game.batch.draw(playerImage, player.x, player.y);
         game.batch.draw(cursorImage, posX - (cursorWidth / 2), game.HEIGH - posY - (cursorHeight / 2));
-        
        
+        spritePlayer.draw(game.batch);
+      
+        
         
         game.batch.end();
 
       
         imputEvent(); 
-        System.out.println("isMoving = " + isMoving );
+       // System.out.println("isMoving = " + isMoving );
         //fpsLogger.log();
         
         if (player.x < 0)
@@ -270,6 +279,8 @@ public class GameScreen implements Screen, InputProcessor{
 		posX = screenX; 
 		posY = screenY;
 		//System.out.println("screenX = " + screenX + "  screenY = " + screenY + " Angle = " + com.ponycornteam.tools.Trigo.angleCalc(400, 240, screenX, screenY));
+		
+		
 		return false;
 	}
 
