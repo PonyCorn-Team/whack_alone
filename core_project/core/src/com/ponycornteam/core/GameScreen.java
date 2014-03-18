@@ -29,11 +29,24 @@ public class GameScreen implements Screen, InputProcessor{
     private OrthographicCamera camera;
     
     
+    private Music music; 
+    
+    private Array<Sound>  sAie;
+    private Array<Sound>  sAieWoman;
+    private Array<Sound>  sPaf;
+    
+    private Sound deadSound;
+    private Sound bounceSound;
+    private Sound shootSound; 
+    
+    
     
     Sound dropSound;
     Music rainMusic;
     
 
+    
+    
     int dropsGathered;
 
     
@@ -69,7 +82,14 @@ public class GameScreen implements Screen, InputProcessor{
         // create the raindrops array and spawn the first raindrop
         //raindrops = new Array<Rectangle>();
 
-        
+         loadSoundAie();
+         loadSoundAieWoman();
+         loadSoundPaf(); 
+          deadSound =  game.manager.get("game/dead.wav", Sound.class);
+          bounceSound =  game.manager.get("game/bounce.wav", Sound.class);
+          shootSound =  game.manager.get("game/shoot.wav", Sound.class); 
+         
+         
         playerImage = game.manager.get("game/01.png", Texture.class);
         cursorImage = game.manager.get("game/cursor4040.png", Texture.class); 
          
@@ -230,4 +250,25 @@ public class GameScreen implements Screen, InputProcessor{
 		// TODO Auto-generated method stub
 		return false;
 	}
+	
+	private void loadSoundAie(){
+		sAie = new Array<Sound>(); 
+		for(int i = 1; i <= 21; i++)
+			sAie.add(game.manager.get("game/aie/aie"+i+".wav", Sound.class));
+	   
+	    
+	}
+	
+	private void loadSoundAieWoman(){
+		sAieWoman = new Array<Sound>(); 
+		for(int i = 1; i <= 3; i++)
+			sAieWoman.add(game.manager.get("game/womanaie/womanaie"+i+".wav", Sound.class));
+	}
+	
+	private void loadSoundPaf(){
+		sPaf = new Array<Sound>(); 
+		for(int i = 1; i <= 4; i++)
+			sPaf.add(game.manager.get("game/paf/paf"+i+".mp3", Sound.class));
+	}
+	
 }
