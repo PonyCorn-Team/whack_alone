@@ -22,15 +22,17 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
+import com.ponycornteam.core.objects.Player;
+import com.ponycornteam.tools.Coord;
 
 public class GameScreen implements Screen, InputProcessor{
     final Core game;
 
     private Texture cursorImage; 
-    private Texture playerImage; 
+    //private Texture playerImage; 
     
     private Sprite spritePlayer; 
-    private Rectangle player;
+    private Player player;
     private OrthographicCamera camera;
     
     
@@ -115,12 +117,7 @@ public class GameScreen implements Screen, InputProcessor{
 
 
         // create a Rectangle to logically represent the bucket
-         player = new Rectangle();
-         player.x = 800 / 2 - 64 / 2; // center the bucket horizontally
-         player.y = 20; // bottom left corner of the bucket is 20 pixels above
-                        // the bottom screen edge
-         player.width = 64;
-         player.height = 64;
+         player = new Player(game.manager.get("game/01.png", Texture.class), new Coord(800 / 2 - 64 / 2, 20));
 
         // create the raindrops array and spawn the first raindrop
         //raindrops = new Array<Rectangle>();
@@ -133,7 +130,7 @@ public class GameScreen implements Screen, InputProcessor{
          shootSound =  game.manager.get("game/shoot.wav", Sound.class); 
          
          
-        playerImage = game.manager.get("game/01.png", Texture.class);
+        //playerImage = game.manager.get("game/01.png", Texture.class);
         cursorImage = game.manager.get("game/cursor4040.png", Texture.class); 
          
         cursorWidth = cursorImage.getWidth(); 
@@ -173,9 +170,10 @@ public class GameScreen implements Screen, InputProcessor{
         currentFrame = walkAnimation.getKeyFrame(stateTime, true);  
         
         
-        spritePlayer = (isMoving) ? new Sprite(currentFrame) : new Sprite(playerImage);
-        spritePlayer.setPosition(player.x, player.y);
-        spritePlayer.setRotation((float) com.ponycornteam.tools.Trigo.angleCalc(player.x, player.y, posX, posY));
+        spritePlayer = (isMoving) ? new Sprite(currentFrame) : new Sprite(player.getTexture());
+        spritePlayer.setPosition((float)player.getX(), (float)player.getY());
+        player.setAngle(posX, game.HEIGH-posY);
+        spritePlayer.setRotation((float) player.getAngle());
         // begin a new batch and draw the bucket and
         // all drops
         game.batch.begin();
@@ -198,14 +196,14 @@ public class GameScreen implements Screen, InputProcessor{
        // System.out.println("isMoving = " + isMoving );
         //fpsLogger.log();
         
-        if (player.x < 0)
-        	player.x = 0;
-        if (player.x > game.WIDTH - 64)
-        	player.x = game.WIDTH - 64;
-        if (player.y < 0)
-        	player.y = 0;
-        if (player.y > game.HEIGH - 64)
-        	player.y = game.HEIGH - 64;
+        if (player.getX() < 0)
+        	player.setX(0);
+        if (player.getX() > game.WIDTH - 64)
+        	player.setX(game.WIDTH - 64);
+        if (player.getY() < 0)
+        	player.setY(0);
+        if (player.getY() > game.HEIGH - 64)
+        	player.setY(game.HEIGH - 64);
     }
 
     @Override
@@ -278,7 +276,8 @@ public class GameScreen implements Screen, InputProcessor{
 	public boolean mouseMoved(int screenX, int screenY) {
 		posX = screenX; 
 		posY = screenY;
-		//System.out.println("screenX = " + screenX + "  screenY = " + screenY + " Angle = " + com.ponycornteam.tools.Trigo.angleCalc(400, 240, screenX, screenY));
+		//System.out.println("screenX = " + screenX + "  screenY = " + screenY);
+		//System.out.println("PlayerX = " + player.getX() + "  PlayerY = " + player.getY() + " Angle = " + player.getAngle());
 		
 		
 		return false;
@@ -329,16 +328,16 @@ public class GameScreen implements Screen, InputProcessor{
 	        
 	        if(Gdx.input.isKeyPressed(Keys.LEFT) ||  Gdx.input.isKeyPressed(Keys.RIGHT)||  Gdx.input.isKeyPressed(Keys.UP)||  Gdx.input.isKeyPressed(Keys.DOWN) ){
 	        	if (Gdx.input.isKeyPressed(Keys.LEFT))
-		            player.x -= 200 * Gdx.graphics.getDeltaTime(); 
+		            player.setX(player.getX()-200 * Gdx.graphics.getDeltaTime()); 
 
 		        if (Gdx.input.isKeyPressed(Keys.RIGHT))
-		        	player.x += 200 * Gdx.graphics.getDeltaTime();
+		        	player.setX(player.getX()+200 * Gdx.graphics.getDeltaTime());
 		        	
 		        if (Gdx.input.isKeyPressed(Keys.DOWN))
-		            player.y -= 200 * Gdx.graphics.getDeltaTime();
+		        	player.setY(player.getY()-200 * Gdx.graphics.getDeltaTime());
 		           
 		        if (Gdx.input.isKeyPressed(Keys.UP))
-		        	player.y += 200 * Gdx.graphics.getDeltaTime();
+		        	player.setY(player.getY()+200 * Gdx.graphics.getDeltaTime());
 		        	
 		        isMoving = true;
 	        	return;
