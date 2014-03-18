@@ -35,9 +35,15 @@ public class LoadingScreen implements Screen {
     	//Jeu
     	
     		//Music
-    	
+    			
     		//Sounds
-    	
+    			loadSoundAie(); 
+    			loadSoundAieWoman(); 
+    			loadSoundPaf();
+    	    	game.manager.load("game/bounce.wav",Sound.class);
+    	    	game.manager.load("game/dead.wav",Sound.class);
+    	    	game.manager.load("game/shoot.wav",Sound.class);
+    			
     		//Pictures
     	game.manager.load("game/01.png",Texture.class);
     	game.manager.load("game/cursor4040.png", Texture.class);
@@ -103,4 +109,22 @@ public class LoadingScreen implements Screen {
 		
 	}
 
+	
+	private void loadSoundAie(){
+
+		for(int i = 1; i <= 21; i++)
+			game.manager.load("game/aie/aie"+i+".wav", Sound.class);
+	   
+	    
+	}
+	
+	private void loadSoundAieWoman(){
+		for(int i = 1; i <= 3; i++)
+			game.manager.load("game/womanaie/womanaie"+i+".wav", Sound.class);
+	}
+	
+	private void loadSoundPaf(){
+		for(int i = 1; i <= 4; i++)
+			game.manager.load("game/paf/paf"+i+".mp3", Sound.class);
+	}
 }
