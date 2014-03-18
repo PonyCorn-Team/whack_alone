@@ -25,18 +25,15 @@ public class GameScreen implements Screen, InputProcessor{
     private Texture cursorImage; 
     private Texture playerImage; 
     
-    Rectangle player;
+    private Rectangle player;
+    private OrthographicCamera camera;
     
     
     
-    Texture dropImage;
-    Texture bucketImage;
     Sound dropSound;
     Music rainMusic;
-    OrthographicCamera camera;
-    Rectangle bucket;
-    Array<Rectangle> raindrops;
-    long lastDropTime;
+    
+
     int dropsGathered;
 
     
