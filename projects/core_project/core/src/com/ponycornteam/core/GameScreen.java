@@ -13,6 +13,9 @@ import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
@@ -58,11 +61,49 @@ public class GameScreen implements Screen, InputProcessor{
     
     private FPSLogger fpsLogger;
     
+    boolean isMoving = false; 
+    
+    
+    private static final int    FRAME_COLS = 3;     // #1
+    private static final int    FRAME_ROWS = 1;     // #2
+
+    Animation           walkAnimation;      // #3
+    Texture             walkSheet;      // #4
+    TextureRegion[]         walkFrames;     // #5
+    TextureRegion           currentFrame;       // #7
+
+    float stateTime;                    // #8
+    
+    
+    
+    
+    
+    
     public GameScreen(final Core gam) {
         this.game = gam;
 
         Texture.setEnforcePotImages(false);
 
+        
+        
+        
+        walkSheet = new Texture(Gdx.files.internal("game/spriteplayer.png")); // #9
+        TextureRegion[][] tmp = TextureRegion.split(walkSheet, walkSheet.getWidth()/FRAME_COLS, walkSheet.getHeight()/FRAME_ROWS);              // #10
+        walkFrames = new TextureRegion[FRAME_COLS * FRAME_ROWS];
+        int index = 0;
+        for (int i = 0; i < FRAME_ROWS; i++) {
+            for (int j = 0; j < FRAME_COLS; j++) {
+                walkFrames[index++] = tmp[i][j];
+            }
+        }
+        walkAnimation = new Animation(0.025f, walkFrames);      // #11
+        stateTime = 0f;                         // #13
+        
+        
+        
+        
+        
+        
 
         //Chargement des sons et musiques 
         dropSound =  game.manager.get("data/drop.wav", Sound.class);
@@ -124,41 +165,28 @@ public class GameScreen implements Screen, InputProcessor{
         // coordinate system specified by the camera.
         game.batch.setProjectionMatrix(camera.combined);
 
+        
+        
+        stateTime += Gdx.graphics.getDeltaTime();           // #15
+        currentFrame = walkAnimation.getKeyFrame(stateTime, true);  
         // begin a new batch and draw the bucket and
         // all drops
         game.batch.begin();
-        game.font.draw(game.batch, "Drops Collected: " + dropsGathered, 0, 480);
         
+        game.font.draw(game.batch, "Drops Collected: " + dropsGathered, 0, 480);
+        if(isMoving)
+        	game.batch.draw(currentFrame, player.x, player.y);  
+        else
+        	game.batch.draw(playerImage, player.x, player.y);
         game.batch.draw(cursorImage, posX - (cursorWidth / 2), game.HEIGH - posY - (cursorHeight / 2));
         
-        game.batch.draw(playerImage, player.x, player.y);
+       
         
         game.batch.end();
 
-        
-        
-        boolean leftPressed = Gdx.input.isButtonPressed(Input.Buttons.LEFT);
-        boolean rightPressed = Gdx.input.isButtonPressed(Input.Buttons.RIGHT);
-
-        if(Gdx.input.isButtonPressed(Input.Buttons.LEFT)){
-        	
-        }
-        
-        if(Gdx.input.isButtonPressed(Input.Buttons.RIGHT)){
-        	
-        }
-        
-        if (Gdx.input.isKeyPressed(Keys.ESCAPE))
-        	 Gdx.app.exit();
-        
-        if (Gdx.input.isKeyPressed(Keys.LEFT))
-            player.x -= 200 * Gdx.graphics.getDeltaTime();
-        if (Gdx.input.isKeyPressed(Keys.RIGHT))
-        	player.x += 200 * Gdx.graphics.getDeltaTime();
-        if (Gdx.input.isKeyPressed(Keys.DOWN))
-            player.y -= 200 * Gdx.graphics.getDeltaTime();
-        if (Gdx.input.isKeyPressed(Keys.UP))
-        	player.y += 200 * Gdx.graphics.getDeltaTime();
+      
+        imputEvent(); 
+        System.out.println("isMoving = " + isMoving );
         //fpsLogger.log();
         
         if (player.x < 0)
@@ -241,7 +269,7 @@ public class GameScreen implements Screen, InputProcessor{
 	public boolean mouseMoved(int screenX, int screenY) {
 		posX = screenX; 
 		posY = screenY; 
-		System.out.println("screenX = " + screenX + "  screenY = " + screenY );
+		//System.out.println("screenX = " + screenX + "  screenY = " + screenY );
 		return false;
 	}
 
@@ -269,6 +297,45 @@ public class GameScreen implements Screen, InputProcessor{
 		sPaf = new Array<Sound>(); 
 		for(int i = 1; i <= 4; i++)
 			sPaf.add(game.manager.get("game/paf/paf"+i+".mp3", Sound.class));
+	}
+	
+	private void imputEvent(){
+		
+			if (Gdx.input.isKeyPressed(Keys.ESCAPE)){
+	        	Gdx.app.exit(); 
+	        	return;
+	        }
+		
+	       	if(Gdx.input.isButtonPressed(Input.Buttons.LEFT)){
+	        	
+	        }
+	        
+	        if(Gdx.input.isButtonPressed(Input.Buttons.RIGHT)){
+	        	
+	        }
+	        
+	        
+	        
+	        if(Gdx.input.isKeyPressed(Keys.LEFT) ||  Gdx.input.isKeyPressed(Keys.RIGHT)||  Gdx.input.isKeyPressed(Keys.UP)||  Gdx.input.isKeyPressed(Keys.DOWN) ){
+	        	if (Gdx.input.isKeyPressed(Keys.LEFT))
+		            player.x -= 200 * Gdx.graphics.getDeltaTime(); 
+
+		        if (Gdx.input.isKeyPressed(Keys.RIGHT))
+		        	player.x += 200 * Gdx.graphics.getDeltaTime();
+		        	
+		        if (Gdx.input.isKeyPressed(Keys.DOWN))
+		            player.y -= 200 * Gdx.graphics.getDeltaTime();
+		           
+		        if (Gdx.input.isKeyPressed(Keys.UP))
+		        	player.y += 200 * Gdx.graphics.getDeltaTime();
+		        	
+		        isMoving = true;
+	        	return;
+		        
+	        }
+	        
+	        isMoving = false; 
+	        return; 
 	}
 	
 }
