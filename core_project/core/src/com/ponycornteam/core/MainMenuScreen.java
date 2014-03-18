@@ -116,7 +116,7 @@ public class MainMenuScreen implements Screen {
 	@Override
 	public void hide() {
 		// TODO Auto-generated method stub
-		
+		music.stop();
 	}
 
 	@Override
