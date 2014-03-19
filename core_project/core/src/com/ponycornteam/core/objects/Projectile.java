@@ -11,7 +11,6 @@ public class Projectile implements IDrawable {
 	public double speed;
 	protected int width, heigth;
 	public Character owner = null;
-	private float oldTime = 0;
 
 	private void avancer(float deltaTime) {
 		if (speed > 0) {
