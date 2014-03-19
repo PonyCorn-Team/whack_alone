@@ -9,11 +9,13 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -53,10 +55,8 @@ public class GameScreen implements Screen, InputProcessor{
     Sound dropSound;
     Music rainMusic;
     
-
+    BitmapFont font;
     
-    
-    int dropsGathered;
 
     
     
@@ -90,8 +90,9 @@ public class GameScreen implements Screen, InputProcessor{
 
         Texture.setEnforcePotImages(false);
 
-        
-        
+        font = new BitmapFont(); 
+        font.setColor(Color.WHITE);
+        font.setScale(1f);
         
         walkSheet = new Texture(Gdx.files.internal("game/spriteplayer.png")); // #9
         TextureRegion[][] tmp = TextureRegion.split(walkSheet, walkSheet.getWidth()/FRAME_COLS, walkSheet.getHeight()/FRAME_ROWS);              // #10
@@ -180,13 +181,14 @@ public class GameScreen implements Screen, InputProcessor{
         // all drops
         game.batch.begin();
         
-        game.font.draw(game.batch, "Drops Collected: " + dropsGathered, 0, 480);
+        game.font.draw(game.batch, "FPS: " + Gdx.graphics.getFramesPerSecond(), 0, 480);
 //        if(isMoving)
 //        	game.batch.draw(currentFrame, player.x, player.y);  
 //        else
 //        	game.batch.draw(playerImage, player.x, player.y);
         game.batch.draw(cursorImage, posX - (cursorWidth / 2), game.HEIGH - posY - (cursorHeight / 2));
        
+        font.draw(game.batch, "hello", (float)p.getX(), (float)p.getY());
         spritePlayer.draw(game.batch);
       
         
