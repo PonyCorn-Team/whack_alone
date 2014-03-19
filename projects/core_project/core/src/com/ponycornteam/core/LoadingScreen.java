@@ -2,6 +2,7 @@ package com.ponycornteam.core;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
@@ -10,6 +11,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont.HAlignment;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 
 public class LoadingScreen implements Screen {
 
@@ -47,7 +50,9 @@ public class LoadingScreen implements Screen {
     		//Pictures
     	game.manager.load("game/01.png",Texture.class);
     	game.manager.load("game/cursor4040.png", Texture.class);
-    	
+    		//map
+    	game.manager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
+    	game.manager.load("game/map/maptest.tmx", TiledMap.class);
     	
     	
     	game.manager.load("data/bucket.png", Texture.class);

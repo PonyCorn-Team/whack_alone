@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="25" height="15" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="tileset" tilewidth="32" tileheight="32">
+  <image source="./tileset.png" width="640" height="32"/>
+ </tileset>
+ <layer name="background" width="25" height="15">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAA+NgYGDgGMWjeBSP4lE8rDAApENQMNwFAAA=
+  </data>
+ </layer>
+ <layer name="wall" width="25" height="15">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAA2NgwAQiWMTwiRMrTw07SAGD2R9DzQ5mHJgFh/hAAWqmH0rswBUexIYNJXFLbBjQyw5caQeWfmAAPbyoFZfo5ojgkRtOdgAAQAgGm9wFAAA=
+  </data>
+ </layer>
+ <layer name="item" width="25" height="15">
+  <data encoding="base64" compression="gzip">
+   H4sIAAAAAAAAAxNiGLxAGA3TAnABMTcQ8wAxL43s4ANifiAWAGJBGtmBK6yEaGTfKBh4QI24HU0flANywpAe4Q4Ad3x6gdwFAAA=
+  </data>
+ </layer>
+ <objectgroup name="owall" width="25" height="15">
+  <object name="w" x="183" y="0" width="9" height="193"/>
+  <object name="w" x="184" y="226" width="7" height="158"/>
+  <object name="w" x="193" y="375" width="245" height="10"/>
+  <object name="w" x="439" y="278" width="8" height="203"/>
+  <object name="w" x="449" y="277" width="127" height="9"/>
+  <object name="w" x="640" y="279" width="33" height="6"/>
+  <object name="w" x="663" y="289" width="9" height="192"/>
+  <object name="w" x="513" y="372" width="97" height="12"/>
+  <object name="w" x="567" y="387" width="8" height="94"/>
+  <object name="w" x="417" y="182" width="384" height="10"/>
+  <object name="w" x="628" y="2" width="10" height="32"/>
+  <object name="w" x="631" y="95" width="10" height="89"/>
+  <object name="w" x="376" y="3" width="8" height="188"/>
+ </objectgroup>
+</map>

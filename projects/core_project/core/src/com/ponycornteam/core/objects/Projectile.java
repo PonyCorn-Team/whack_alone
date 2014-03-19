@@ -1,5 +1,6 @@
 package com.ponycornteam.core.objects;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.ponycornteam.tools.Coord;
@@ -10,6 +11,8 @@ public class Projectile implements IDrawable {
 	public double speed;
 	protected int width, heigth;
 	public Character owner = null;
+	public Sound shootSound;
+	public Sound bounceSound;
 
 	private void avancer(float deltaTime) {
 		if (speed > 0) {
