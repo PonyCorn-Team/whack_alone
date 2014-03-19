@@ -128,7 +128,7 @@ public class GameScreen implements Screen, InputProcessor{
         player.setMoving(walkAnimation);
         pro.localCoord = new Coord(0, 480, 340);
         pro.speed = 120;
-        pro.texture = new Sprite(game.manager.get("game/01.png", Texture.class));
+        pro.texture = new Sprite(game.manager.get("game/palet.png", Texture.class));
         // create the raindrops array and spawn the first raindrop
         //raindrops = new Array<Rectangle>();
 
