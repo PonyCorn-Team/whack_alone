@@ -19,6 +19,12 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.MapObjects;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
@@ -42,13 +48,6 @@ public class GameScreen implements Screen, InputProcessor{
     
     private Music music; 
     
-    private Array<Sound>  sAie;
-    private Array<Sound>  sAieWoman;
-    private Array<Sound>  sPaf;
-    
-    private Sound deadSound;
-    private Sound bounceSound;
-    private Sound shootSound;
     private Player p;
     Projectile pro;
     
@@ -82,8 +81,9 @@ public class GameScreen implements Screen, InputProcessor{
     float stateTime;                    // #8
     
     
-    
-    
+    private OrthogonalTiledMapRenderer renderer;
+    private TiledMapTileLayer collisionObjectLayer;
+    private MapObjects objects;
     
     
     public GameScreen(final Core gam) {
@@ -106,10 +106,14 @@ public class GameScreen implements Screen, InputProcessor{
         
         
         
-        
-        
-        
+        TiledMap map = game.manager.get("game/map/maptest.tmx");
+        renderer = new OrthogonalTiledMapRenderer(map, 1f);
+        //int objectLayerId = 3;
+      //  collisionObjectLayer = (TiledMapTileLayer)map.getLayers().get(objectLayerId);
+       // objects = collisionObjectLayer.getObjects();
 
+        objects = map.getLayers().get("owall").getObjects(); 
+        
         //Chargement des sons et musiques 
         dropSound =  game.manager.get("data/drop.wav", Sound.class);
         rainMusic =   game.manager.get("data/rain.mp3", Music.class);
@@ -131,9 +135,9 @@ public class GameScreen implements Screen, InputProcessor{
          loadSoundAie();
          loadSoundAieWoman();
          loadSoundPaf(); 
-         deadSound =  game.manager.get("game/dead.wav", Sound.class);
-         bounceSound =  game.manager.get("game/bounce.wav", Sound.class);
-         shootSound =  game.manager.get("game/shoot.wav", Sound.class); 
+         p.deadSound =  game.manager.get("game/dead.wav", Sound.class);
+         //bounceSound =  game.manager.get("game/bounce.wav", Sound.class);
+         //shootSound =  game.manager.get("game/shoot.wav", Sound.class); 
          
          
         //playerImage = game.manager.get("game/01.png", Texture.class);
@@ -173,12 +177,17 @@ public class GameScreen implements Screen, InputProcessor{
         currentFrame = walkAnimation.getKeyFrame(stateTime, true);  
         
         player.setAngle(posX, game.HEIGH-posY);
+        
+        renderer.setView(camera);
+		renderer.render();
         /*spritePlayer = (isMoving) ? new Sprite(currentFrame) : new Sprite(player.getTexture());
         spritePlayer.setPosition((float)player.getX(), (float)player.getY());
         spritePlayer.setRotation((float) player.getAngle());*/
         // begin a new batch and draw the bucket and
         // all drops
         game.batch.begin();
+        
+
         
         game.font.draw(game.batch, "FPS: " + Gdx.graphics.getFramesPerSecond(), 0, 480);
 //        if(isMoving)
@@ -202,6 +211,16 @@ public class GameScreen implements Screen, InputProcessor{
         imputEvent(); 
        // System.out.println("isMoving = " + isMoving );
         //fpsLogger.log();
+        
+     // there are several other types, Rectangle is probably the most common one
+        for (RectangleMapObject rectangleObject : objects.getByType(RectangleMapObject.class)) {
+
+            Rectangle rectangle = rectangleObject.getRectangle();
+            Rectangle prec = new Rectangle((float)player.getX(),(float)player.getY(),(float)player.getWidth(),(float)player.getHeigh()); 
+            if (Intersector.overlaps(rectangle, prec)) {
+            	System.out.println("TOUCHEEEE");
+            }
+        }
         
         if (player.getX() < 0)
         	player.setX(0);
@@ -298,23 +317,23 @@ public class GameScreen implements Screen, InputProcessor{
 	}
 	
 	private void loadSoundAie(){
-		sAie = new Array<Sound>(); 
+		p.sAie = new Array<Sound>(); 
 		for(int i = 1; i <= 21; i++)
-			sAie.add(game.manager.get("game/aie/aie"+i+".wav", Sound.class));
+			p.sAie.add(game.manager.get("game/aie/aie"+i+".wav", Sound.class));
 	   
 	    
 	}
 	
 	private void loadSoundAieWoman(){
-		sAieWoman = new Array<Sound>(); 
+		p.sAie = new Array<Sound>(); 
 		for(int i = 1; i <= 3; i++)
-			sAieWoman.add(game.manager.get("game/womanaie/womanaie"+i+".wav", Sound.class));
+			p.sAie.add(game.manager.get("game/womanaie/womanaie"+i+".wav", Sound.class));
 	}
 	
 	private void loadSoundPaf(){
-		sPaf = new Array<Sound>(); 
+		p.sPaf = new Array<Sound>(); 
 		for(int i = 1; i <= 4; i++)
-			sPaf.add(game.manager.get("game/paf/paf"+i+".mp3", Sound.class));
+			p.sPaf.add(game.manager.get("game/paf/paf"+i+".mp3", Sound.class));
 	}
 	
 	private void imputEvent(){
