@@ -31,7 +31,7 @@ public class LoadingScreen implements Screen {
     	game.manager.load("splash/wall.png",Texture.class);
     	//Menu 
     	game.manager.load("menu/menu.wav",Music.class);
-    	
+    	game.manager.load("menu/menu.png",Texture.class);
     	//Jeu
     	
     		//Music
