@@ -31,6 +31,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.ponycornteam.core.objects.ICharacter;
+import com.ponycornteam.core.objects.IColidable;
 import com.ponycornteam.core.objects.Player;
 import com.ponycornteam.core.objects.Projectile;
 import com.ponycornteam.tools.Coord;
@@ -115,6 +116,7 @@ public class GameScreen implements Screen, InputProcessor {
 		// create a Rectangle to logically represent the bucket
 		p = new Player(game.manager.get("game/01.png", Texture.class),
 				new Coord(800 / 2 - 64 / 2, 20));
+		p.setText("hello", Color.CYAN, 2.0);
 		player = p;
 		pro = new Projectile();
 		player.setMoving(walkAnimation);
@@ -122,6 +124,7 @@ public class GameScreen implements Screen, InputProcessor {
 		pro.speed = 120;
 		pro.texture = new Sprite(game.manager.get("game/palet.png",
 				Texture.class));
+		pro.owner = p;
 		// create the raindrops array and spawn the first raindrop
 		// raindrops = new Array<Rectangle>();
 
@@ -186,7 +189,6 @@ public class GameScreen implements Screen, InputProcessor {
         game.batch.draw(cursorImage, posX - (cursorWidth / 2), game.HEIGH - posY - (cursorHeight / 2));
         
         //font.draw(game.batch, "hello", (float)(p.getX() + p.getWidth() +10), (float)(p.getY() + p.getHeigh()+10));
-        p.setText("hello");
         /*spritePlayer.draw(game.batch);
         spritePlayer = new Sprite(pro.texture);*/
         pro.draw(game.batch, stateTime);
@@ -202,40 +204,54 @@ public class GameScreen implements Screen, InputProcessor {
         //fpsLogger.log();
         
      // there are several other types, Rectangle is probably the most common one
-        Array<Rectangle> rec = new Array<Rectangle>();
-        rec.add(new Rectangle((float)player.getX(),(float)player.getY(),(float)player.getWidth(),(float)player.getHeigh()));
-        rec.add(new Rectangle((float)pro.localCoord.x,(float)pro.localCoord.y,(float)pro.texture.getWidth(),(float)pro.texture.getHeight()));
+        Array<IColidable> colidables = new Array<IColidable>();
+        colidables.add(player);
+        colidables.add(pro);
         
-        for (Rectangle r : rec) {
+        for (IColidable c : colidables) {
         	for (RectangleMapObject rectangleObject : objects.getByType(RectangleMapObject.class)) {
                 Rectangle rectangle = rectangleObject.getRectangle();
-                if (Intersector.overlaps(rectangle, r)) {
-                	System.out.println("TOUCHEEEE");
-                	if(r.x>rectangle.x && r.x<rectangle.x+rectangle.width && r.x+r.width>rectangle.x && r.x+r.width<rectangle.x+rectangle.width)
+                if (Intersector.overlaps(rectangle, c.getRectangle())) {
+                	if(c.getRectangle().x>rectangle.x && c.getRectangle().x<rectangle.x+rectangle.width && c.getRectangle().x+c.getRectangle().width>rectangle.x && c.getRectangle().x+c.getRectangle().width<rectangle.x+rectangle.width)
                 	{
-                		if(r.y+r.height>rectangle.y && r.y+r.height>rectangle.y+rectangle.height)
+                		if(c.getRectangle().y+c.getRectangle().height>rectangle.y && c.getRectangle().y+c.getRectangle().height>rectangle.y+rectangle.height)
                 		{
-                			pro.colide(direction.bot);
-                			pro.localCoord.y = rectangle.y + rectangle.height;
+                			c.colisionObject(direction.bot);
+                			c.setY(rectangle.y + rectangle.height);
                 		}
                 		else
                 		{
-                			pro.colide(direction.top);
-                			pro.localCoord.y = rectangle.y - r.height;	
+                			c.colisionObject(direction.top);
+                			c.setY(rectangle.y - c.getRectangle().height);	
                 		}
 
                 	}
                 	else
-            			if(r.x>rectangle.x && r.x<rectangle.x+rectangle.width && r.x+r.width>rectangle.x)
+            			if(c.getRectangle().x>rectangle.x && c.getRectangle().x<rectangle.x+rectangle.width && c.getRectangle().x+c.getRectangle().width>rectangle.x)
             			{
-            				pro.colide(direction.left);
-            				pro.localCoord.x = rectangle.x + rectangle.width;	
+            				c.colisionObject(direction.left);
+            				c.setX(rectangle.x + rectangle.width);	
             			} 
                 		else
                 		{
-                			pro.colide(direction.right);
-                			pro.localCoord.x = rectangle.x - r.width;
+                			c.colisionObject(direction.right);
+                			c.setX(rectangle.x - c.getRectangle().width);
                 		}
+                }
+            }
+		}
+
+        Array<Projectile> projectiles = new Array<Projectile>();
+        projectiles.add(pro);
+        Array<ICharacter> characteres = new Array<ICharacter>();
+        characteres.add(player);
+        
+        for (Projectile p : projectiles) {
+        	for (ICharacter c : characteres) {
+                Rectangle rectangle = c.getRectangle();
+                if (Intersector.overlaps(rectangle, p.getRectangle())){
+                	if(p.getRectangle().x>rectangle.x && p.getRectangle().x<rectangle.x+rectangle.width && p.getRectangle().x+p.getRectangle().width>rectangle.x && p.getRectangle().x+p.getRectangle().width<rectangle.x+rectangle.width)
+                		c.colisionProjectile(p);
                 }
             }
 		}
