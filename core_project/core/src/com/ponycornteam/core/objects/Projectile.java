@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.ponycornteam.tools.Coord;
+import com.ponycornteam.tools.Coord.direction;
 
 public class Projectile implements IDrawable {
 	public Coord localCoord;
@@ -21,11 +22,15 @@ public class Projectile implements IDrawable {
 					* deltaTime;
 			localCoord.y += Math.sin(-localCoord.angle / 180 * Math.PI) * speed
 					* deltaTime;
-			speed -= 100 * deltaTime;
+			speed -= 75 * deltaTime;
 		}
 	}
-
-	@Override
+	
+	public void colide(Coord.direction dir){
+		speed /=2;
+		localCoord.angle = ((dir == direction.top||dir == direction.bot)?360:180)-localCoord.angle;
+	}
+	
 	public void draw(SpriteBatch batch, float stateTime) {
 		avancer(Gdx.graphics.getDeltaTime());
 		texture.setPosition((float) localCoord.x, (float) localCoord.y);

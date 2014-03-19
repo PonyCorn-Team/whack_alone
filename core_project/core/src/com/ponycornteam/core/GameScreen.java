@@ -34,130 +34,119 @@ import com.ponycornteam.core.objects.ICharacter;
 import com.ponycornteam.core.objects.Player;
 import com.ponycornteam.core.objects.Projectile;
 import com.ponycornteam.tools.Coord;
+import com.ponycornteam.tools.Coord.direction;
 
-public class GameScreen implements Screen, InputProcessor{
-    final Core game;
+public class GameScreen implements Screen, InputProcessor {
+	final Core game;
 
-    private Texture cursorImage; 
-    //private Texture playerImage; 
-    
-    //private Sprite spritePlayer; 
-    private ICharacter player;
-    private OrthographicCamera camera;
-    
-    
-    private Music music; 
-    
-    private Player p;
-    Projectile pro;
-    
-    
-    Sound dropSound;
-    Music rainMusic;
-    
-    BitmapFont font;
-    
+	private Texture cursorImage;
+	// private Texture playerImage;
 
-    
-    
-    int posX = 0, playerX = 0; 
-    int posY = 0, playerY = 0; 
-    int cursorWidth = 0; 
-    int cursorHeight = 0; 
-    
-    private FPSLogger fpsLogger;
-    
-    boolean isMoving = false; 
-    
-    
-    private static final int    FRAME_COLS = 3;     // #1
-    private static final int    FRAME_ROWS = 1;     // #2
+	// private Sprite spritePlayer;
+	private ICharacter player;
+	private OrthographicCamera camera;
 
-    Animation           walkAnimation;      // #3
-    Texture             walkSheet;      // #4
-    TextureRegion[]         walkFrames;     // #5
-    TextureRegion           currentFrame;       // #7
+	private Music music;
 
-    float stateTime;                    // #8
-    
-    
-    private OrthogonalTiledMapRenderer renderer;
-    private TiledMapTileLayer collisionObjectLayer;
-    private MapObjects objects;
-    
-    
-    public GameScreen(final Core gam) {
-        this.game = gam;
+	private Player p;
+	Projectile pro;
 
-        Texture.setEnforcePotImages(false);
+	Sound dropSound;
+	Music rainMusic;
 
-        
-        walkSheet = new Texture(Gdx.files.internal("game/spriteplayer.png")); // #9
-        TextureRegion[][] tmp = TextureRegion.split(walkSheet, walkSheet.getWidth()/FRAME_COLS, walkSheet.getHeight()/FRAME_ROWS);              // #10
-        walkFrames = new TextureRegion[FRAME_COLS * FRAME_ROWS];
-        int index = 0;
-        for (int i = 0; i < FRAME_ROWS; i++) {
-            for (int j = 0; j < FRAME_COLS; j++) {
-                walkFrames[index++] = tmp[i][j];
-            }
-        }
-        walkAnimation = new Animation(0.025f, walkFrames);      // #11
-        stateTime = 0f;                         // #13
-        
-        
-        
-        TiledMap map = game.manager.get("game/map/maptest.tmx");
-        renderer = new OrthogonalTiledMapRenderer(map, 1f);
-        //int objectLayerId = 3;
-      //  collisionObjectLayer = (TiledMapTileLayer)map.getLayers().get(objectLayerId);
-       // objects = collisionObjectLayer.getObjects();
+	BitmapFont font;
 
-        objects = map.getLayers().get("owall").getObjects(); 
-        
-        //Chargement des sons et musiques 
-        dropSound =  game.manager.get("data/drop.wav", Sound.class);
-        rainMusic =   game.manager.get("data/rain.mp3", Music.class);
-        rainMusic.setLooping(true);
+	int posX = 0, playerX = 0;
+	int posY = 0, playerY = 0;
+	int cursorWidth = 0;
+	int cursorHeight = 0;
 
+	private FPSLogger fpsLogger;
 
+	boolean isMoving = false;
 
-        // create a Rectangle to logically represent the bucket
-        p = new Player(game.manager.get("game/01.png", Texture.class), new Coord(800 / 2 - 64 / 2, 20)); 
-        player = p;
-        pro = new Projectile();
-        player.setMoving(walkAnimation);
-        pro.localCoord = new Coord(0, 480, 340);
-        pro.speed = 120;
-        pro.texture = new Sprite(game.manager.get("game/palet.png", Texture.class));
-        // create the raindrops array and spawn the first raindrop
-        //raindrops = new Array<Rectangle>();
+	private static final int FRAME_COLS = 3; // #1
+	private static final int FRAME_ROWS = 1; // #2
 
-         loadSoundAie();
-         loadSoundAieWoman();
-         loadSoundPaf(); 
-         p.deadSound =  game.manager.get("game/dead.wav", Sound.class);
-         //bounceSound =  game.manager.get("game/bounce.wav", Sound.class);
-         //shootSound =  game.manager.get("game/shoot.wav", Sound.class); 
-         
-         
-        //playerImage = game.manager.get("game/01.png", Texture.class);
-        cursorImage = game.manager.get("game/cursor4040.png", Texture.class); 
-         
-        cursorWidth = cursorImage.getWidth(); 
-        cursorHeight = cursorImage.getHeight(); 
-        
-        
-        // Création de la caméra 
-        camera = new OrthographicCamera();
-        camera.setToOrtho(false, game.WIDTH, game.HEIGH);
-        
-        Gdx.input.setInputProcessor(this);
-        Gdx.input.setCursorCatched(true);
-    }
+	Animation walkAnimation; // #3
+	Texture walkSheet; // #4
+	TextureRegion[] walkFrames; // #5
+	TextureRegion currentFrame; // #7
 
-    
-    
-    @Override
+	float stateTime; // #8
+
+	private OrthogonalTiledMapRenderer renderer;
+	private TiledMapTileLayer collisionObjectLayer;
+	private MapObjects objects;
+
+	public GameScreen(final Core gam) {
+		this.game = gam;
+
+		Texture.setEnforcePotImages(false);
+
+		walkSheet = new Texture(Gdx.files.internal("game/spriteplayer.png")); // #9
+		TextureRegion[][] tmp = TextureRegion.split(walkSheet,
+				walkSheet.getWidth() / FRAME_COLS, walkSheet.getHeight()
+						/ FRAME_ROWS); // #10
+		walkFrames = new TextureRegion[FRAME_COLS * FRAME_ROWS];
+		int index = 0;
+		for (int i = 0; i < FRAME_ROWS; i++) {
+			for (int j = 0; j < FRAME_COLS; j++) {
+				walkFrames[index++] = tmp[i][j];
+			}
+		}
+		walkAnimation = new Animation(0.025f, walkFrames); // #11
+		stateTime = 0f; // #13
+
+		TiledMap map = game.manager.get("game/map/maptest.tmx");
+		renderer = new OrthogonalTiledMapRenderer(map, 1f);
+		// int objectLayerId = 3;
+		// collisionObjectLayer =
+		// (TiledMapTileLayer)map.getLayers().get(objectLayerId);
+		// objects = collisionObjectLayer.getObjects();
+
+		objects = map.getLayers().get("owall").getObjects();
+
+		// Chargement des sons et musiques
+		dropSound = game.manager.get("data/drop.wav", Sound.class);
+		rainMusic = game.manager.get("data/rain.mp3", Music.class);
+		rainMusic.setLooping(true);
+
+		// create a Rectangle to logically represent the bucket
+		p = new Player(game.manager.get("game/01.png", Texture.class),
+				new Coord(800 / 2 - 64 / 2, 20));
+		player = p;
+		pro = new Projectile();
+		player.setMoving(walkAnimation);
+		pro.localCoord = new Coord(0, 480, 340);
+		pro.speed = 120;
+		pro.texture = new Sprite(game.manager.get("game/palet.png",
+				Texture.class));
+		// create the raindrops array and spawn the first raindrop
+		// raindrops = new Array<Rectangle>();
+
+		loadSoundAie();
+		loadSoundAieWoman();
+		loadSoundPaf();
+		p.deadSound = game.manager.get("game/dead.wav", Sound.class);
+		// bounceSound = game.manager.get("game/bounce.wav", Sound.class);
+		// shootSound = game.manager.get("game/shoot.wav", Sound.class);
+
+		// playerImage = game.manager.get("game/01.png", Texture.class);
+		cursorImage = game.manager.get("game/cursor4040.png", Texture.class);
+
+		cursorWidth = cursorImage.getWidth();
+		cursorHeight = cursorImage.getHeight();
+
+		// Création de la caméra
+		camera = new OrthographicCamera();
+		camera.setToOrtho(false, game.WIDTH, game.HEIGH);
+
+		Gdx.input.setInputProcessor(this);
+		Gdx.input.setCursorCatched(true);
+	}
+
+	@Override
     public void render(float delta) {
         // clear the screen with a dark blue color. The
         // arguments to glClearColor are the red, green
@@ -213,14 +202,43 @@ public class GameScreen implements Screen, InputProcessor{
         //fpsLogger.log();
         
      // there are several other types, Rectangle is probably the most common one
-        for (RectangleMapObject rectangleObject : objects.getByType(RectangleMapObject.class)) {
+        Array<Rectangle> rec = new Array<Rectangle>();
+        rec.add(new Rectangle((float)player.getX(),(float)player.getY(),(float)player.getWidth(),(float)player.getHeigh()));
+        rec.add(new Rectangle((float)pro.localCoord.x,(float)pro.localCoord.y,(float)pro.texture.getWidth(),(float)pro.texture.getHeight()));
+        
+        for (Rectangle r : rec) {
+        	for (RectangleMapObject rectangleObject : objects.getByType(RectangleMapObject.class)) {
+                Rectangle rectangle = rectangleObject.getRectangle();
+                if (Intersector.overlaps(rectangle, r)) {
+                	System.out.println("TOUCHEEEE");
+                	if(r.x>rectangle.x && r.x<rectangle.x+rectangle.width && r.x+r.width>rectangle.x && r.x+r.width<rectangle.x+rectangle.width)
+                	{
+                		if(r.y+r.height>rectangle.y && r.y+r.height>rectangle.y+rectangle.height)
+                		{
+                			pro.colide(direction.bot);
+                			pro.localCoord.y = rectangle.y + rectangle.height;
+                		}
+                		else
+                		{
+                			pro.colide(direction.top);
+                			pro.localCoord.y = rectangle.y - r.height;	
+                		}
 
-            Rectangle rectangle = rectangleObject.getRectangle();
-            Rectangle prec = new Rectangle((float)player.getX(),(float)player.getY(),(float)player.getWidth(),(float)player.getHeigh()); 
-            if (Intersector.overlaps(rectangle, prec)) {
-            	System.out.println("TOUCHEEEE");
+                	}
+                	else
+            			if(r.x>rectangle.x && r.x<rectangle.x+rectangle.width && r.x+r.width>rectangle.x)
+            			{
+            				pro.colide(direction.left);
+            				pro.localCoord.x = rectangle.x + rectangle.width;	
+            			} 
+                		else
+                		{
+                			pro.colide(direction.right);
+                			pro.localCoord.x = rectangle.x - r.width;
+                		}
+                }
             }
-        }
+		}
         
         if (player.getX() < 0)
         	player.setX(0);
@@ -232,36 +250,36 @@ public class GameScreen implements Screen, InputProcessor{
         	player.setY(game.HEIGH - 64);
     }
 
-    @Override
-    public void resize(int width, int height) {
-    	
-    }
+	@Override
+	public void resize(int width, int height) {
 
-    @Override
-    public void show() {
-        // start the playback of the background music
-        // when the screen is shown
-        rainMusic.play();
-    }
+	}
 
-    @Override
-    public void hide() {
-    }
+	@Override
+	public void show() {
+		// start the playback of the background music
+		// when the screen is shown
+		rainMusic.play();
+	}
 
-    @Override
-    public void pause() {
-    }
+	@Override
+	public void hide() {
+	}
 
-    @Override
-    public void resume() {
-    }
+	@Override
+	public void pause() {
+	}
 
-    @Override
-    public void dispose() {
-    	cursorImage.dispose();
-        dropSound.dispose();
-        rainMusic.dispose();
-    }
+	@Override
+	public void resume() {
+	}
+
+	@Override
+	public void dispose() {
+		cursorImage.dispose();
+		dropSound.dispose();
+		rainMusic.dispose();
+	}
 
 	@Override
 	public boolean keyDown(int keycode) {
@@ -301,12 +319,13 @@ public class GameScreen implements Screen, InputProcessor{
 
 	@Override
 	public boolean mouseMoved(int screenX, int screenY) {
-		posX = screenX; 
+		posX = screenX;
 		posY = screenY;
-		//System.out.println("screenX = " + screenX + "  screenY = " + screenY);
-		//System.out.println("PlayerX = " + player.getX() + "  PlayerY = " + player.getY() + " Angle = " + player.getAngle());
-		
-		
+		// System.out.println("screenX = " + screenX + "  screenY = " +
+		// screenY);
+		// System.out.println("PlayerX = " + player.getX() + "  PlayerY = " +
+		// player.getY() + " Angle = " + player.getAngle());
+
 		return false;
 	}
 
@@ -315,68 +334,70 @@ public class GameScreen implements Screen, InputProcessor{
 		// TODO Auto-generated method stub
 		return false;
 	}
-	
-	private void loadSoundAie(){
-		p.sAie = new Array<Sound>(); 
-		for(int i = 1; i <= 21; i++)
-			p.sAie.add(game.manager.get("game/aie/aie"+i+".wav", Sound.class));
-	   
-	    
-	}
-	
-	private void loadSoundAieWoman(){
-		p.sAie = new Array<Sound>(); 
-		for(int i = 1; i <= 3; i++)
-			p.sAie.add(game.manager.get("game/womanaie/womanaie"+i+".wav", Sound.class));
-	}
-	
-	private void loadSoundPaf(){
-		p.sPaf = new Array<Sound>(); 
-		for(int i = 1; i <= 4; i++)
-			p.sPaf.add(game.manager.get("game/paf/paf"+i+".mp3", Sound.class));
-	}
-	
-	private void imputEvent(){
-		
-			if (Gdx.input.isKeyPressed(Keys.ESCAPE)){
-	        	Gdx.app.exit(); 
-	        	return;
-	        }
-		
-	       	if(Gdx.input.isButtonPressed(Input.Buttons.LEFT)){
-	        	pro.localCoord.x = p.localCoord.x;
-	        	pro.localCoord.y = p.localCoord.y;
-	        	pro.localCoord.angle = p.localCoord.angle;
-	        	pro.speed = 800;
-	        }
-	        
-	        if(Gdx.input.isButtonPressed(Input.Buttons.RIGHT)){
-	        	
-	        }
-	        
-	        
-	        
-	        if(Gdx.input.isKeyPressed(Keys.LEFT) ||  Gdx.input.isKeyPressed(Keys.RIGHT)||  Gdx.input.isKeyPressed(Keys.UP)||  Gdx.input.isKeyPressed(Keys.DOWN) ){
-	        	if (Gdx.input.isKeyPressed(Keys.LEFT))
-		            player.setX(player.getX()-200 * Gdx.graphics.getDeltaTime()); 
 
-		        if (Gdx.input.isKeyPressed(Keys.RIGHT))
-		        	player.setX(player.getX()+200 * Gdx.graphics.getDeltaTime());
-		        	
-		        if (Gdx.input.isKeyPressed(Keys.DOWN))
-		        	player.setY(player.getY()-200 * Gdx.graphics.getDeltaTime());
-		           
-		        if (Gdx.input.isKeyPressed(Keys.UP))
-		        	player.setY(player.getY()+200 * Gdx.graphics.getDeltaTime());
-		        	
-		        isMoving = true;
-	        	return;
-		        
-	        }
-	        
-	        isMoving = false; 
-	        return; 
+	private void loadSoundAie() {
+		p.sAie = new Array<Sound>();
+		for (int i = 1; i <= 21; i++)
+			p.sAie.add(game.manager.get("game/aie/aie" + i + ".wav",
+					Sound.class));
+
 	}
-	 
-	
+
+	private void loadSoundAieWoman() {
+		p.sAie = new Array<Sound>();
+		for (int i = 1; i <= 3; i++)
+			p.sAie.add(game.manager.get("game/womanaie/womanaie" + i + ".wav",
+					Sound.class));
+	}
+
+	private void loadSoundPaf() {
+		p.sPaf = new Array<Sound>();
+		for (int i = 1; i <= 4; i++)
+			p.sPaf.add(game.manager.get("game/paf/paf" + i + ".mp3",
+					Sound.class));
+	}
+
+	private void imputEvent() {
+
+		if (Gdx.input.isKeyPressed(Keys.ESCAPE)) {
+			Gdx.app.exit();
+			return;
+		}
+
+		if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+			pro.localCoord.x = p.localCoord.x;
+			pro.localCoord.y = p.localCoord.y;
+			pro.localCoord.angle = p.localCoord.angle;
+			pro.speed = 600;
+		}
+
+		if (Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
+
+		}
+
+		if (Gdx.input.isKeyPressed(Keys.LEFT)
+				|| Gdx.input.isKeyPressed(Keys.RIGHT)
+				|| Gdx.input.isKeyPressed(Keys.UP)
+				|| Gdx.input.isKeyPressed(Keys.DOWN)) {
+			if (Gdx.input.isKeyPressed(Keys.LEFT))
+				player.setX(player.getX() - 200 * Gdx.graphics.getDeltaTime());
+
+			if (Gdx.input.isKeyPressed(Keys.RIGHT))
+				player.setX(player.getX() + 200 * Gdx.graphics.getDeltaTime());
+
+			if (Gdx.input.isKeyPressed(Keys.DOWN))
+				player.setY(player.getY() - 200 * Gdx.graphics.getDeltaTime());
+
+			if (Gdx.input.isKeyPressed(Keys.UP))
+				player.setY(player.getY() + 200 * Gdx.graphics.getDeltaTime());
+
+			isMoving = true;
+			return;
+
+		}
+
+		isMoving = false;
+		return;
+	}
+
 }
