@@ -17,4 +17,9 @@ public class Trigo {
 		else
 			return 0;
 	}
+	
+	//Permet d'avoir la destination d'un point si on applique un angle avec ça vitesse
+	public static Coord calcDest(Coord start, double speed){
+		return new Coord(Math.cos(start.angle/180*Math.PI)*speed, Math.cos(start.angle/180*Math.PI)*speed, start.angle);
+	}
 }

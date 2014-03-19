@@ -24,6 +24,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.ponycornteam.core.objects.ICharacter;
 import com.ponycornteam.core.objects.Player;
+import com.ponycornteam.core.objects.Projectile;
 import com.ponycornteam.tools.Coord;
 
 public class GameScreen implements Screen, InputProcessor{
@@ -32,7 +33,7 @@ public class GameScreen implements Screen, InputProcessor{
     private Texture cursorImage; 
     //private Texture playerImage; 
     
-    private Sprite spritePlayer; 
+    //private Sprite spritePlayer; 
     private ICharacter player;
     private OrthographicCamera camera;
     
@@ -47,7 +48,7 @@ public class GameScreen implements Screen, InputProcessor{
     private Sound bounceSound;
     private Sound shootSound;
     private Player p;
-    
+    Projectile pro;
     
     
     Sound dropSound;
@@ -89,8 +90,6 @@ public class GameScreen implements Screen, InputProcessor{
         this.game = gam;
 
         Texture.setEnforcePotImages(false);
-
-        
         
         
         walkSheet = new Texture(Gdx.files.internal("game/spriteplayer.png")); // #9
@@ -121,6 +120,11 @@ public class GameScreen implements Screen, InputProcessor{
         // create a Rectangle to logically represent the bucket
         p = new Player(game.manager.get("game/01.png", Texture.class), new Coord(800 / 2 - 64 / 2, 20)); 
         player = p;
+        pro = new Projectile();
+        player.setMoving(walkAnimation);
+        pro.localCoord = new Coord(0, 480, 340);
+        pro.speed = 120;
+        pro.texture = new Sprite(game.manager.get("game/01.png", Texture.class));
         // create the raindrops array and spawn the first raindrop
         //raindrops = new Array<Rectangle>();
 
@@ -145,7 +149,6 @@ public class GameScreen implements Screen, InputProcessor{
         
         Gdx.input.setInputProcessor(this);
         Gdx.input.setCursorCatched(true);
-
     }
 
     
@@ -167,15 +170,14 @@ public class GameScreen implements Screen, InputProcessor{
         game.batch.setProjectionMatrix(camera.combined);
 
         
-        
-        stateTime += Gdx.graphics.getDeltaTime();           // #15
+        float deltapouet;
+        stateTime += /*deltapouet =*/ Gdx.graphics.getDeltaTime();           // #15
         currentFrame = walkAnimation.getKeyFrame(stateTime, true);  
         
-        
-        spritePlayer = (isMoving) ? new Sprite(currentFrame) : new Sprite(player.getTexture());
-        spritePlayer.setPosition((float)player.getX(), (float)player.getY());
         player.setAngle(posX, game.HEIGH-posY);
-        spritePlayer.setRotation((float) player.getAngle());
+        /*spritePlayer = (isMoving) ? new Sprite(currentFrame) : new Sprite(player.getTexture());
+        spritePlayer.setPosition((float)player.getX(), (float)player.getY());
+        spritePlayer.setRotation((float) player.getAngle());*/
         // begin a new batch and draw the bucket and
         // all drops
         game.batch.begin();
@@ -187,10 +189,12 @@ public class GameScreen implements Screen, InputProcessor{
 //        	game.batch.draw(playerImage, player.x, player.y);
         game.batch.draw(cursorImage, posX - (cursorWidth / 2), game.HEIGH - posY - (cursorHeight / 2));
        
-        spritePlayer.draw(game.batch);
-      
-        
-        
+        /*spritePlayer.draw(game.batch);
+        spritePlayer = new Sprite(pro.texture);*/
+        pro.draw(game.batch, stateTime);
+        /*spritePlayer.setPosition((float)pro.localCoord.x, (float)pro.localCoord.y);
+        spritePlayer.draw(game.batch);*/
+        p.draw(game.batch, stateTime, isMoving);
         game.batch.end();
 
       
@@ -210,6 +214,7 @@ public class GameScreen implements Screen, InputProcessor{
 
     @Override
     public void resize(int width, int height) {
+    	
     }
 
     @Override
