@@ -91,9 +91,6 @@ public class GameScreen implements Screen, InputProcessor{
 
         Texture.setEnforcePotImages(false);
 
-        font = new BitmapFont(); 
-        font.setColor(Color.WHITE);
-        font.setScale(1f);
         
         walkSheet = new Texture(Gdx.files.internal("game/spriteplayer.png")); // #9
         TextureRegion[][] tmp = TextureRegion.split(walkSheet, walkSheet.getWidth()/FRAME_COLS, walkSheet.getHeight()/FRAME_ROWS);              // #10
@@ -172,9 +169,7 @@ public class GameScreen implements Screen, InputProcessor{
         // coordinate system specified by the camera.
         game.batch.setProjectionMatrix(camera.combined);
 
-        
-        float deltapouet;
-        stateTime += /*deltapouet =*/ Gdx.graphics.getDeltaTime();           // #15
+        stateTime += Gdx.graphics.getDeltaTime();           // #15
         currentFrame = walkAnimation.getKeyFrame(stateTime, true);  
         
         player.setAngle(posX, game.HEIGH-posY);
@@ -192,8 +187,8 @@ public class GameScreen implements Screen, InputProcessor{
 //        	game.batch.draw(playerImage, player.x, player.y);
         game.batch.draw(cursorImage, posX - (cursorWidth / 2), game.HEIGH - posY - (cursorHeight / 2));
         
-        font.draw(game.batch, "hello", (float)p.getX(), (float)p.getY());
-        
+        //font.draw(game.batch, "hello", (float)(p.getX() + p.getWidth() +10), (float)(p.getY() + p.getHeigh()+10));
+        p.setText("hello");
         /*spritePlayer.draw(game.batch);
         spritePlayer = new Sprite(pro.texture);*/
         pro.draw(game.batch, stateTime);
@@ -360,5 +355,6 @@ public class GameScreen implements Screen, InputProcessor{
 	        isMoving = false; 
 	        return; 
 	}
+	 
 	
 }

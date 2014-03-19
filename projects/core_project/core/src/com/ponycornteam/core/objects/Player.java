@@ -23,4 +23,8 @@ public class Player extends Character {
 		this.move = move;
 		draw(batch, stateTime - oldTime);
 	}
+	public void setText(String txt)
+	{
+		saying = txt;
+	}
 }

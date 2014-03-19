@@ -1,7 +1,9 @@
 package com.ponycornteam.core.objects;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.ponycornteam.tools.Coord;
@@ -13,6 +15,7 @@ abstract class Character implements ICharacter, IDrawable {
 	protected int width, heigth;
 	protected Sprite standing, dying;
 	protected Animation moving;
+	protected String saying = "";
 
 	public void setCoord(Coord newCoord) {
 		localCoord = newCoord;
@@ -76,15 +79,24 @@ abstract class Character implements ICharacter, IDrawable {
 		sp.setPosition((float) localCoord.x, (float) localCoord.y);
 		sp.setRotation((float) -localCoord.angle);
 		sp.draw(batch);
+		if (!saying.isEmpty())
+			drawText(batch, saying);
 	}
 
-	@Override
 	public double getWidth() {
 		return width;
 	}
 
-	@Override
 	public double getHeigh() {
 		return heigth;
+	}
+	
+	protected void drawText(SpriteBatch batch, String txt)
+	{
+
+        BitmapFont font = new BitmapFont(); 
+        font.setColor(Color.WHITE);
+        font.setScale(1f);
+		font.draw(batch, "hello", (float)(localCoord.x + width +10), (float)(localCoord.y + heigth+10));
 	}
 }
