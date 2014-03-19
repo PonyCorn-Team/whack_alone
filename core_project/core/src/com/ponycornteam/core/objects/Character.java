@@ -1,5 +1,6 @@
 package com.ponycornteam.core.objects;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -7,10 +8,12 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 import com.ponycornteam.tools.Coord;
+import com.ponycornteam.tools.Coord.direction;
 
-abstract class Character implements ICharacter, IDrawable {
+abstract class Character implements ICharacter {
 
 	public Coord localCoord;
 	public boolean dead = false, move = false;
@@ -18,12 +21,14 @@ abstract class Character implements ICharacter, IDrawable {
 	protected Sprite standing, dying;
 	protected Animation moving;
 	protected String saying = "";
+	protected Double sayingCount = 0.0;
+	protected Color saycolor = null;
 
-	public Array<Sound>  sAie;
-	public Array<Sound>  sPaf;
-    
+	public Array<Sound> sAie;
+	public Array<Sound> sPaf;
+
 	public Sound deadSound;
-	
+
 	public void setCoord(Coord newCoord) {
 		localCoord = newCoord;
 	}
@@ -86,8 +91,11 @@ abstract class Character implements ICharacter, IDrawable {
 		sp.setPosition((float) localCoord.x, (float) localCoord.y);
 		sp.setRotation((float) -localCoord.angle);
 		sp.draw(batch);
-		if (!saying.isEmpty())
-			drawText(batch, saying);
+		if (!saying.isEmpty() && sayingCount>0)
+		{
+			drawText(batch, saying, saycolor);
+			sayingCount -= Gdx.graphics.getDeltaTime();
+		}
 	}
 
 	public double getWidth() {
@@ -97,13 +105,41 @@ abstract class Character implements ICharacter, IDrawable {
 	public double getHeigh() {
 		return heigth;
 	}
-	
-	protected void drawText(SpriteBatch batch, String txt)
-	{
 
-        BitmapFont font = new BitmapFont(); 
-        font.setColor(Color.WHITE);
-        font.setScale(1f);
-		font.draw(batch, "hello", (float)(localCoord.x + width +10), (float)(localCoord.y + heigth+10));
+	protected void drawText(SpriteBatch batch, String txt, Color color) {
+
+		BitmapFont font = new BitmapFont();
+		font.setColor(color!=null?color:Color.WHITE);
+		font.setScale(1f);
+		font.draw(batch, txt, (float) (localCoord.x + width + 10),
+				(float) (localCoord.y + heigth + 10));
+	}
+
+	public Rectangle getRectangle() {
+		return new Rectangle((float) localCoord.x, (float) localCoord.y,
+				(float) standing.getWidth(), (float) standing.getHeight());
+	}
+
+	public void colisionObject(direction dir) {
+		saying = "can't pass here";
+		saycolor = Color.ORANGE;
+		sayingCount = 5.0;
+
+	}
+
+	public void colisionProjectile(Projectile projectile) {
+		if(projectile.owner != this)
+		{
+			saying = "shit i'm dead!";
+			saycolor = Color.RED;
+			sayingCount = 10.0;
+		}
+		else
+		{
+			saying = "pfiou it's mine!";
+			saycolor = Color.GREEN;
+			sayingCount = 2.5;
+		}
+
 	}
 }

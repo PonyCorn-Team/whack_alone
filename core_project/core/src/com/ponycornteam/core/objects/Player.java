@@ -1,5 +1,6 @@
 package com.ponycornteam.core.objects;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -23,8 +24,10 @@ public class Player extends Character {
 		draw(batch, stateTime);
 		
 	}
-	public void setText(String txt)
+	public void setText(String txt, Color txtColor, Double timeShowing)
 	{
 		saying = txt;
+		saycolor = txtColor;
+		sayingCount = (timeShowing>0)?timeShowing:5;
 	}
 }
