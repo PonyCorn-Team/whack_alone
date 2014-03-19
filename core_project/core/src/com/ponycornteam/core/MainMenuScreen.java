@@ -11,6 +11,8 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -36,6 +38,9 @@ public class MainMenuScreen implements Screen {
     private static final float BUTTON_HEIGHT = 60f;
     private static final float BUTTON_SPACING = 10f;
     
+    private Group background; 
+    
+    
     public MainMenuScreen(final Core gam) {
     	game = gam;
 
@@ -53,25 +58,29 @@ public class MainMenuScreen implements Screen {
         music.setLooping(true);
         
         
+        Image background = new Image(new TextureRegion(game.manager.get("menu/menu.png", Texture.class)));
+        background.setFillParent(true);
+        stage.addActor(background); 
+        
 		final float buttonX = ( game.WIDTH - BUTTON_WIDTH ) / 2;
-		 float currentY = 280f;
+		 float currentY = 100;
 	       // label "welcome"
-        Label welcomeLabel = new Label( "Nom du jeu", skin );
-        welcomeLabel.setX(( (  game.WIDTH - welcomeLabel.getWidth() ) / 2 ));
-        welcomeLabel.setY(( currentY + 100 ));
-        stage.addActor( welcomeLabel );
+     //   Label welcomeLabel = new Label( "Nom du jeu", skin );
+    //    welcomeLabel.setX(( (  game.WIDTH - welcomeLabel.getWidth() ) / 2 ));
+     //   welcomeLabel.setY(( currentY + 100 ));
+      //  stage.addActor( welcomeLabel );
  
         // button "start game"
         TextButton startGameButton = new TextButton( "Start game", skin );
-        startGameButton.setX(buttonX);
-        startGameButton.setY(currentY);
+        startGameButton.setX(50);
+        startGameButton.setY(100);
         startGameButton.setWidth(BUTTON_WIDTH);
         startGameButton.setHeight(BUTTON_HEIGHT);
         stage.addActor( startGameButton );
  
         // button "options"
         TextButton highScoreButton = new TextButton( "High Score", skin );
-        highScoreButton.setX(buttonX);
+        highScoreButton.setX(50);
         highScoreButton.setY(currentY-= BUTTON_HEIGHT + BUTTON_SPACING);
         highScoreButton.setWidth(BUTTON_WIDTH);
         highScoreButton.setHeight(BUTTON_HEIGHT);
