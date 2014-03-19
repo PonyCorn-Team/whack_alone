@@ -344,7 +344,10 @@ public class GameScreen implements Screen, InputProcessor{
 	        }
 		
 	       	if(Gdx.input.isButtonPressed(Input.Buttons.LEFT)){
-	        	
+	        	pro.localCoord.x = p.localCoord.x;
+	        	pro.localCoord.y = p.localCoord.y;
+	        	pro.localCoord.angle = p.localCoord.angle;
+	        	pro.speed = 800;
 	        }
 	        
 	        if(Gdx.input.isButtonPressed(Input.Buttons.RIGHT)){
