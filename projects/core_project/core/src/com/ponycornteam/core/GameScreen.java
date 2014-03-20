@@ -87,7 +87,6 @@ public class GameScreen implements Screen, InputProcessor {
 	private MapObjects spawnEnnemies;
 	private MapObjects oExit;
 	private MapObjects oStart;
-	boolean isDead = false; 
 	
 	public static Array<Projectile> projectiles;
 	private Array<Enemy> enemy = new Array<Enemy>();
@@ -209,7 +208,7 @@ public class GameScreen implements Screen, InputProcessor {
 		
 		
 	
-		if(isDead){
+		if(p.dsead){
 			 game.setScreen(new GameOverScreen(game));
 	            dispose();
 		}
@@ -425,7 +424,7 @@ public class GameScreen implements Screen, InputProcessor {
 			}
 
 			if (Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
-			    isDead = true; 
+			    p.dead = true; 
 			}
 
 			if (Gdx.input.isKeyPressed(Keys.LEFT) || Gdx.input.isKeyPressed(Keys.RIGHT) || Gdx.input.isKeyPressed(Keys.UP) || Gdx.input.isKeyPressed(Keys.DOWN)) {
