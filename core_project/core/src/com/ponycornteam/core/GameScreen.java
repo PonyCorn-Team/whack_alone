@@ -82,7 +82,11 @@ public class GameScreen implements Screen, InputProcessor {
 	private OrthogonalTiledMapRenderer renderer;
 	private TiledMapTileLayer collisionObjectLayer;
 	private MapObjects objects;
-
+	private MapObjects spawnEnnemies;
+	private MapObjects oExit;
+	private MapObjects oStart;
+	
+	
 	public static Array<Projectile> projectiles = new Array<Projectile>();
 
 	public GameScreen(final Core gam) {
@@ -102,7 +106,7 @@ public class GameScreen implements Screen, InputProcessor {
 		walkAnimation = new Animation(0.025f, walkFrames); // #11
 		stateTime = 0f; // #13
 
-		TiledMap map = game.manager.get("game/map/maptest.tmx");
+		TiledMap map = game.manager.get("game/map/map1.tmx");
 		renderer = new OrthogonalTiledMapRenderer(map, 1f);
 		// int objectLayerId = 3;
 		// collisionObjectLayer =
@@ -110,7 +114,10 @@ public class GameScreen implements Screen, InputProcessor {
 		// objects = collisionObjectLayer.getObjects();
 
 		objects = map.getLayers().get("owall").getObjects();
-
+		spawnEnnemies = map.getLayers().get("espawn").getObjects();   
+		oExit = map.getLayers().get("oexit").getObjects();
+		oStart = map.getLayers().get("ostart").getObjects();
+		
 		// Chargement des sons et musiques
 		dropSound = game.manager.get("data/drop.wav", Sound.class);
 		rainMusic = game.manager.get("data/rain.mp3", Music.class);
