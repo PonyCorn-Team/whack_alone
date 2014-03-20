@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" width="25" height="15" tilewidth="32" tileheight="32">
  <tileset firstgid="1" name="tileset" tilewidth="32" tileheight="32">
-  <image source="../../../../../../../../Dropbox/Public/asset/asset/tileset.png" width="640" height="64"/>
+  <image source="./tileset.png" width="640" height="64"/>
  </tileset>
  <layer name="background" width="25" height="15">
   <data encoding="base64" compression="gzip">
@@ -15,27 +15,56 @@
  </layer>
  <layer name="item" width="25" height="15">
   <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAAA2NgGAW0AkID7QAag+Huv8EAhnIYC6NhZECOv7Dp4QJibiDmAWJeMswkBvABMT8QCwCxII3swBdW5AIAJR7I8dwFAAA=
+   H4sIAAAAAAAAA2NgoC4QRsO0AFxAzA3EPEDMSyM7+ICYH4gFgFiQTDOECMjTI6xoCQj5bxRQDoZyGONL3+T4C5ueoVIWEAK0KAsAJqcTYdwFAAA=
   </data>
  </layer>
- <objectgroup name="owall" width="25" height="15">
-  <object name="w" x="183" y="0" width="9" height="193"/>
-  <object name="w" x="184" y="226" width="7" height="158"/>
-  <object name="w" x="193" y="375" width="245" height="10"/>
-  <object name="w" x="439" y="278" width="8" height="203"/>
-  <object name="w" x="449" y="277" width="127" height="9"/>
-  <object name="w" x="640" y="279" width="33" height="6"/>
-  <object name="w" x="663" y="289" width="9" height="192"/>
-  <object name="w" x="513" y="372" width="97" height="12"/>
-  <object name="w" x="567" y="387" width="8" height="94"/>
-  <object name="w" x="417" y="182" width="384" height="10"/>
-  <object name="w" x="628" y="2" width="10" height="32"/>
-  <object name="w" x="631" y="95" width="10" height="89"/>
-  <object name="w" x="376" y="3" width="8" height="188"/>
- </objectgroup>
  <layer name="exit" width="25" height="15">
   <data encoding="base64" compression="gzip">
    H4sIAAAAAAAAA2NgwASSSJhWgB52jIJRMApGwWAB9C5XAdylAWvcBQAA
   </data>
  </layer>
+ <objectgroup name="owall" width="25" height="15">
+  <object name="w" x="98" y="65" width="285" height="10"/>
+  <object name="w" x="182" y="77" width="11" height="21"/>
+  <object name="w" x="375" y="77" width="9" height="83"/>
+  <object name="w" x="257" y="2" width="9" height="64"/>
+  <object name="w" x="386" y="151" width="180" height="10"/>
+  <object name="w" x="566" y="64" width="11" height="193"/>
+  <object name="w" x="544" y="321" width="23" height="9"/>
+  <object name="w" x="566" y="320" width="11" height="96"/>
+  <object name="w" x="385" y="329" width="9" height="158"/>
+  <object name="w" x="278" y="192" width="9" height="129"/>
+  <object name="w" x="129" y="385" width="128" height="64"/>
+  <object name="w" x="358" y="357" width="21" height="23"/>
+  <object name="w" x="231" y="293" width="21" height="22"/>
+  <object name="w" x="0" y="320" width="32" height="10"/>
+  <object name="w" x="0" y="182" width="193" height="11"/>
+  <object name="w" x="182" y="159" width="10" height="23"/>
+  <object name="w" x="389" y="101" width="22" height="23"/>
+  <object name="w" x="582" y="165" width="22" height="22"/>
+  <object name="w" x="774" y="356" width="20" height="22"/>
+  <object name="w" x="578" y="407" width="231" height="10"/>
+  <object name="w" x="577" y="214" width="129" height="10"/>
+  <object name="w" x="129" y="320" width="350" height="10"/>
+  <object name="w" x="640" y="33" width="129" height="64"/>
+  <object name="w" x="768" y="214" width="40" height="9"/>
+  <object name="e" x="0" y="1" width="800" height="4"/>
+  <object name="e" x="796" y="4" width="5" height="487"/>
+  <object name="e" x="2" y="477" width="799" height="4"/>
+  <object name="e" x="0" y="4" width="4" height="479"/>
+ </objectgroup>
+ <objectgroup name="oexit" width="25" height="15">
+  <object name="exit" x="225" y="1" width="30" height="64"/>
+ </objectgroup>
+ <objectgroup name="ostart" width="25" height="15">
+  <object name="start" x="768" y="419" width="41" height="69"/>
+ </objectgroup>
+ <objectgroup name="espawn" width="25" height="15">
+  <object name="m" x="32" y="24" width="11" height="11"/>
+  <object name="m" x="282" y="440" width="14" height="14"/>
+  <object name="m" x="525" y="101" width="17" height="17"/>
+  <object name="m" x="297" y="19" width="15" height="15"/>
+  <object name="m" x="604" y="357" width="18" height="18"/>
+  <object name="m" x="323" y="279" width="12" height="12"/>
+ </objectgroup>
 </map>
