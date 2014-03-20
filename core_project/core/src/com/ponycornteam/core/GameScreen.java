@@ -208,7 +208,7 @@ public class GameScreen implements Screen, InputProcessor {
 		
 		
 	
-		if(p.dsead){
+		if(p.dead){
 			 game.setScreen(new GameOverScreen(game));
 	            dispose();
 		}
