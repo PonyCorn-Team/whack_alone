@@ -28,7 +28,7 @@ public class Projectile implements IDrawable, IColidable, IColidableProjectile {
 		if (speed > 0) {
 			localCoord.x += Math.cos(-localCoord.angle / 180 * Math.PI) * speed * deltaTime;
 			localCoord.y += Math.sin(-localCoord.angle / 180 * Math.PI) * speed * deltaTime;
-			speed -= 75 * deltaTime;
+			speed -= 50 * deltaTime;
 		}
 	}
 
@@ -59,7 +59,7 @@ public class Projectile implements IDrawable, IColidable, IColidableProjectile {
 	@Override
 	public void colisionObject(direction dir) {
 		if (ammoType == Ammo.palet) {
-			speed /= 2;
+			speed /= 1.5;
 			localCoord.angle = ((dir == direction.top || dir == direction.bot) ? 360 : 180) - localCoord.angle;
 		} else
 			speed = 0;
@@ -69,7 +69,7 @@ public class Projectile implements IDrawable, IColidable, IColidableProjectile {
 	public void colisionCharacter(ICharacter character) {
 		if (owner != character) {
 			if (ammoType == Ammo.palet)
-				speed /= 2;
+				speed /= 1.5;
 			else
 				speed = 0;
 		}
