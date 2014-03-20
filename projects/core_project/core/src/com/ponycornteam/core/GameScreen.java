@@ -255,15 +255,6 @@ public class GameScreen implements Screen, InputProcessor {
                 }
             }
 		}
-        
-        if (player.getX() < 0)
-        	player.setX(0);
-        if (player.getX() > game.WIDTH - 64)
-        	player.setX(game.WIDTH - 64);
-        if (player.getY() < 0)
-        	player.setY(0);
-        if (player.getY() > game.HEIGH - 64)
-        	player.setY(game.HEIGH - 64);
     }
 
 	@Override
