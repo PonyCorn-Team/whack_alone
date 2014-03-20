@@ -48,10 +48,10 @@
   <object name="w" x="129" y="320" width="350" height="10"/>
   <object name="w" x="640" y="33" width="129" height="64"/>
   <object name="w" x="768" y="214" width="40" height="9"/>
-  <object name="e" x="0" y="1" width="800" height="4"/>
-  <object name="e" x="796" y="4" width="5" height="487"/>
-  <object name="e" x="2" y="477" width="799" height="4"/>
-  <object name="e" x="-13" y="2" width="16" height="479"/>
+  <object name="e" x="-17" y="-28" width="832" height="32"/>
+  <object name="e" x="795" y="-15" width="32" height="512"/>
+  <object name="e" x="-17" y="476" width="832" height="32"/>
+  <object name="e" x="-26" y="-15" width="32" height="512"/>
  </objectgroup>
  <objectgroup name="oexit" width="25" height="15">
   <object name="exit" x="225" y="1" width="30" height="64"/>
