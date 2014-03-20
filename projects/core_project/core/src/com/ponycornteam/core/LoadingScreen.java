@@ -54,6 +54,8 @@ public class LoadingScreen implements Screen {
     	game.manager.load("game/cursor4040.png", Texture.class);
     	game.manager.load("game/palet.png", Texture.class);
     	game.manager.load("game/bullet.png", Texture.class);
+    	game.manager.load("game/dead.png", Texture.class);
+    	game.manager.load("game/dead2.png", Texture.class);
     		//map
     	game.manager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
     	game.manager.load("game/map/maptest.tmx", TiledMap.class);
