@@ -19,6 +19,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -30,6 +31,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
+import com.ponycornteam.core.objects.Enemy;
 import com.ponycornteam.core.objects.ICharacter;
 import com.ponycornteam.core.objects.IColidable;
 import com.ponycornteam.core.objects.IColidableCharacter;
@@ -48,7 +50,7 @@ public class GameScreen implements Screen, InputProcessor {
 	// private Texture playerImage;
 
 	// private Sprite spritePlayer;
-	private ICharacter player;
+	//private ICharacter player;
 	private OrthographicCamera camera;
 
 	private Music music;
@@ -85,11 +87,12 @@ public class GameScreen implements Screen, InputProcessor {
 	private MapObjects spawnEnnemies;
 	private MapObjects oExit;
 	private MapObjects oStart;
-	
-	
-	public static Array<Projectile> projectiles = new Array<Projectile>();
+
+	public static Array<Projectile> projectiles;
+	private Array<Enemy> enemy = new Array<Enemy>();
 
 	public GameScreen(final Core gam) {
+		projectiles = new Array<Projectile>();
 		this.game = gam;
 
 		Texture.setEnforcePotImages(false);
@@ -114,21 +117,19 @@ public class GameScreen implements Screen, InputProcessor {
 		// objects = collisionObjectLayer.getObjects();
 
 		objects = map.getLayers().get("owall").getObjects();
-		spawnEnnemies = map.getLayers().get("espawn").getObjects();   
+		spawnEnnemies = map.getLayers().get("espawn").getObjects();
 		oExit = map.getLayers().get("oexit").getObjects();
 		oStart = map.getLayers().get("ostart").getObjects();
-		
+
 		// Chargement des sons et musiques
 		dropSound = game.manager.get("data/drop.wav", Sound.class);
 		rainMusic = game.manager.get("data/rain.mp3", Music.class);
 		rainMusic.setLooping(true);
 
 		// create a Rectangle to logically represent the bucket
-
-		p = new Player(game.manager.get("game/01.png", Texture.class), new Coord(800 / 2 - 64 / 2, 20), Ammo.palet, new Sprite(game.manager.get("game/palet.png", Texture.class)));
-		p.setText("hello", Color.CYAN, 2.0);
-		player = p;
-		player.setMoving(walkAnimation);
+		Rectangle r = oStart.getByType(RectangleMapObject.class).first().getRectangle();
+		p = new Player(game.manager.get("game/01.png", Texture.class), new Coord(r.x, r.y), Ammo.palet, new Sprite(game.manager.get("game/palet.png", Texture.class)));
+		p.setMoving(walkAnimation);
 
 		// create the raindrops array and spawn the first raindrop
 		// raindrops = new Array<Rectangle>();
@@ -137,6 +138,26 @@ public class GameScreen implements Screen, InputProcessor {
 		loadSoundAieWoman();
 		loadSoundPaf();
 		p.deadSound = game.manager.get("game/dead.wav", Sound.class);
+		Texture stand = game.manager.get("game/02.png", Texture.class);
+		Sprite bullet = new Sprite(game.manager.get("game/bullet.png", Texture.class));
+
+		Texture walkerSheet = new Texture(Gdx.files.internal("game/spriteenemy.png")); // #9
+		TextureRegion[][] tmp2 = TextureRegion.split(walkSheet, walkerSheet.getWidth() / FRAME_COLS, walkerSheet.getHeight() / FRAME_ROWS); // #10
+		TextureRegion[] walkFrames2 = new TextureRegion[FRAME_COLS * FRAME_ROWS];
+		index = 0;
+		for (int i = 0; i < FRAME_ROWS; i++) {
+			for (int j = 0; j < FRAME_COLS; j++) {
+				walkFrames2[index++] = tmp2[i][j];
+			}
+		}
+		Animation walk = new Animation(0.025f, walkFrames); // #11
+
+		for (RectangleMapObject spawn : spawnEnnemies.getByType(RectangleMapObject.class)) {
+			r = spawn.getRectangle();
+			enemy.add(new Enemy(stand, new Coord(r.x, r.y), Ammo.bullet, bullet));
+			p.setMoving(walk);
+		}
+
 		// bounceSound = game.manager.get("game/bounce.wav", Sound.class);
 		// shootSound = game.manager.get("game/shoot.wav", Sound.class);
 
@@ -173,7 +194,7 @@ public class GameScreen implements Screen, InputProcessor {
 		stateTime += Gdx.graphics.getDeltaTime(); // #15
 		currentFrame = walkAnimation.getKeyFrame(stateTime, true);
 
-		player.setAngle(posX, game.HEIGH - posY);
+		p.setAngle(posX, game.HEIGH - posY);
 
 		renderer.setView(camera);
 		renderer.render();
@@ -200,9 +221,12 @@ public class GameScreen implements Screen, InputProcessor {
 		 * spritePlayer.draw(game.batch); spritePlayer = new
 		 * Sprite(pro.texture);
 		 */
-		for (IDrawable d : projectiles) {
+		for (IDrawable d : projectiles)
 			d.draw(game.batch, stateTime);
-		}
+
+		for (IDrawable e : enemy)
+			e.draw(game.batch, stateTime);
+
 		/*
 		 * spritePlayer.setPosition((float)pro.localCoord.x,
 		 * (float)pro.localCoord.y); spritePlayer.draw(game.batch);
@@ -218,7 +242,8 @@ public class GameScreen implements Screen, InputProcessor {
 		// there are several other types, Rectangle is probably the most common
 		// one
 		Array<IColidable> colidables = new Array<IColidable>();
-		colidables.add(player);
+		colidables.add(p);
+		colidables.addAll(enemy);
 		for (IColidable p : projectiles) {
 			colidables.add(p);
 		}
@@ -257,7 +282,7 @@ public class GameScreen implements Screen, InputProcessor {
 		}
 
 		Array<ICharacter> characteres = new Array<ICharacter>();
-		characteres.add(player);
+		characteres.add(p);
 
 		for (Projectile p : projectiles) {
 			for (ICharacter c : characteres) {
@@ -375,7 +400,7 @@ public class GameScreen implements Screen, InputProcessor {
 	}
 
 	private void imputEvent() {
-		if (p != null) {
+		if (p != null && !p.dead) {
 			if (Gdx.input.isKeyPressed(Keys.ESCAPE)) {
 				Gdx.app.exit();
 				return;
@@ -391,16 +416,16 @@ public class GameScreen implements Screen, InputProcessor {
 
 			if (Gdx.input.isKeyPressed(Keys.LEFT) || Gdx.input.isKeyPressed(Keys.RIGHT) || Gdx.input.isKeyPressed(Keys.UP) || Gdx.input.isKeyPressed(Keys.DOWN)) {
 				if (Gdx.input.isKeyPressed(Keys.LEFT))
-					player.setX(player.getX() - 200 * Gdx.graphics.getDeltaTime());
+					p.setX(p.getX() - 200 * Gdx.graphics.getDeltaTime());
 
 				if (Gdx.input.isKeyPressed(Keys.RIGHT))
-					player.setX(player.getX() + 200 * Gdx.graphics.getDeltaTime());
+					p.setX(p.getX() + 200 * Gdx.graphics.getDeltaTime());
 
 				if (Gdx.input.isKeyPressed(Keys.DOWN))
-					player.setY(player.getY() - 200 * Gdx.graphics.getDeltaTime());
+					p.setY(p.getY() - 200 * Gdx.graphics.getDeltaTime());
 
 				if (Gdx.input.isKeyPressed(Keys.UP))
-					player.setY(player.getY() + 200 * Gdx.graphics.getDeltaTime());
+					p.setY(p.getY() + 200 * Gdx.graphics.getDeltaTime());
 
 				isMoving = true;
 				return;

@@ -57,9 +57,12 @@ public class Player extends Character {
 			saying = "shit i'm dead!";
 			saycolor = Color.RED;
 			sayingCount = 10.0;
+			dead = true;
+			if (deadSound != null)
+				deadSound.play();
 		} else {
 			if (projectile.ammoType == Ammo.palet && projectile.speed < 250) {
-				saying = "YEAH AMMO!";
+				saying = "YEAH SOME FUCKING AMMO!";
 				saycolor = Color.PINK;
 				sayingCount = 2.5;
 				projectile.localCoord = null;
@@ -70,6 +73,5 @@ public class Player extends Character {
 				sayingCount = 2.5;
 			}
 		}
-
 	}
 }
