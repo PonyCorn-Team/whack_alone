@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.ponycornteam.tools.Coord;
 import com.ponycornteam.tools.Coord.direction;
 
-public class Projectile implements IDrawable, IColidable {
+public class Projectile implements IDrawable, IColidable, IColidableProjectile {
 	public Coord localCoord;
 	public Sprite texture;
 	public double speed;
@@ -17,6 +17,8 @@ public class Projectile implements IDrawable, IColidable {
 	public Sound shootSound;
 	public Sound bounceSound;
 	public Boolean isDestroy = false;
+	public static enum Ammo {palet, bullet};
+	public Ammo ammoType = Ammo.bullet;
 
 	private void avancer(float deltaTime) {
 		if (speed > 0) {
@@ -54,13 +56,23 @@ public class Projectile implements IDrawable, IColidable {
 
 	@Override
 	public void colisionObject(direction dir) {
-		speed /=2;
-		localCoord.angle = ((dir == direction.top||dir == direction.bot)?360:180)-localCoord.angle;
+		if(ammoType == Ammo.palet)
+		{
+			speed /=2;
+			localCoord.angle = ((dir == direction.top||dir == direction.bot)?360:180)-localCoord.angle;
+		}
+		else
+			speed = 0;
 	}
 
 	@Override
-	public void colisionProjectile(Projectile projectile) {
-		// TODO Auto-generated method stub
-		
+	public void colisionCharacter(ICharacter character) {
+		if(owner != character)
+		{
+			if(ammoType == Ammo.palet)
+				speed /=2;
+			else
+				speed = 0;
+		}
 	}
 }
