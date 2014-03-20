@@ -27,10 +27,11 @@ public class Enemy extends Character {
 	@Override
 	public void colisionProjectile(Projectile projectile) {
 		if (projectile.owner != this && projectile.owner != null && projectile.speed > 0) {
-			saying = "shit i'm dead!";
+			saying = edead.random();
 			saycolor = Color.RED;
 			sayingCount = 10.0;
 			dead = true;
+			projectile.owner.setText(pkill.random(), Color.ORANGE, 2.0);
 			if (deadSound != null)
 				deadSound.play();
 		}

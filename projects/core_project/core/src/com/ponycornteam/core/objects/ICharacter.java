@@ -1,5 +1,6 @@
 package com.ponycornteam.core.objects;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.ponycornteam.tools.Coord;
@@ -32,4 +33,6 @@ public interface ICharacter extends IDrawable, IColidable, IColidableCharacter {
 	public void setAngle(double ang);
 
 	public void setAngle(double destX, double destY);
+
+	public void setText(String txt, Color txtColor, Double timeShowing);
 }
