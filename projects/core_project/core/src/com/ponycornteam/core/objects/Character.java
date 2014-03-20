@@ -23,6 +23,7 @@ abstract class Character implements ICharacter {
 	protected String saying = "";
 	protected Double sayingCount = 0.0;
 	protected Color saycolor = null;
+	protected Array<Projectile> ammo = new Array<Projectile>();
 
 	public Array<Sound> sAie;
 	public Array<Sound> sPaf;
@@ -124,22 +125,6 @@ abstract class Character implements ICharacter {
 		saying = "can't pass here";
 		saycolor = Color.ORANGE;
 		sayingCount = 5.0;
-
-	}
-
-	public void colisionProjectile(Projectile projectile) {
-		if(projectile.owner != this)
-		{
-			saying = "shit i'm dead!";
-			saycolor = Color.RED;
-			sayingCount = 10.0;
-		}
-		else
-		{
-			saying = "pfiou it's mine!";
-			saycolor = Color.GREEN;
-			sayingCount = 2.5;
-		}
 
 	}
 }
