@@ -212,7 +212,12 @@ public class GameScreen implements Screen, InputProcessor {
         	for (RectangleMapObject rectangleObject : objects.getByType(RectangleMapObject.class)) {
                 Rectangle rectangle = rectangleObject.getRectangle();
                 if (Intersector.overlaps(rectangle, c.getRectangle())) {
-                	if(c.getRectangle().x>rectangle.x && c.getRectangle().x<rectangle.x+rectangle.width && c.getRectangle().x+c.getRectangle().width>rectangle.x && c.getRectangle().x+c.getRectangle().width<rectangle.x+rectangle.width)
+                	if(c.getRectangle().x<rectangle.x+rectangle.width && c.getRectangle().x+c.getRectangle().width>rectangle.x
+                			//Angie specialy for you a fucking mega over ternaire condition
+                			// Beacause ternaire is not for fucking NOOB
+                			// The following fucking over mega ternaire of the world dead who kill every NOOB and your fucking brain too
+                			// check if the width under the colide box is greater than the height under the colide box
+                			&& (((c.getRectangle().x>rectangle.x)?c.getRectangle().x:rectangle.x)-((c.getRectangle().x+c.getRectangle().getWidth()<rectangle.x+rectangle.width)?c.getRectangle().x+c.getRectangle().getWidth():rectangle.x+rectangle.width))<(((c.getRectangle().y>rectangle.y)?c.getRectangle().y:rectangle.y)-((c.getRectangle().y+c.getRectangle().getHeight()<rectangle.y+rectangle.height)?c.getRectangle().y+c.getRectangle().getHeight():rectangle.y+rectangle.height)))
                 	{
                 		if(c.getRectangle().y+c.getRectangle().height>rectangle.y && c.getRectangle().y+c.getRectangle().height>rectangle.y+rectangle.height)
                 		{
@@ -250,7 +255,6 @@ public class GameScreen implements Screen, InputProcessor {
         	for (ICharacter c : characteres) {
                 Rectangle rectangle = c.getRectangle();
                 if (Intersector.overlaps(rectangle, p.getRectangle())){
-                	if(p.getRectangle().x>rectangle.x && p.getRectangle().x<rectangle.x+rectangle.width && p.getRectangle().x+p.getRectangle().width>rectangle.x && p.getRectangle().x+p.getRectangle().width<rectangle.x+rectangle.width)
                 		c.colisionProjectile(p);
                 }
             }
