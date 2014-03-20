@@ -86,6 +86,7 @@ public class GameScreen implements Screen, InputProcessor {
 	private MapObjects oExit;
 	private MapObjects oStart;
 	
+	boolean isDead = false; 
 	
 	public static Array<Projectile> projectiles = new Array<Projectile>();
 
@@ -183,8 +184,17 @@ public class GameScreen implements Screen, InputProcessor {
 		 * spritePlayer.setPosition((float)player.getX(), (float)player.getY());
 		 * spritePlayer.setRotation((float) player.getAngle());
 		 */
-		// begin a new batch and draw the bucket and
-		// all drops
+		
+		
+		
+	
+		if(isDead){
+			 game.setScreen(new GameOverScreen(game));
+	            dispose();
+		}
+		
+		
+		
 		game.batch.begin();
 
 		game.font.draw(game.batch, "FPS: " + Gdx.graphics.getFramesPerSecond(), 0, 480);
@@ -209,8 +219,11 @@ public class GameScreen implements Screen, InputProcessor {
 		 */
 		p.draw(game.batch, stateTime, isMoving);
 
+		
+		
 		game.batch.end();
-
+		
+		
 		imputEvent();
 		// System.out.println("isMoving = " + isMoving );
 		// fpsLogger.log();
@@ -271,6 +284,7 @@ public class GameScreen implements Screen, InputProcessor {
 				projectiles.removeValue(p, true);
 
 		}
+
 	}
 
 	@Override
@@ -386,7 +400,7 @@ public class GameScreen implements Screen, InputProcessor {
 			}
 
 			if (Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
-
+			    isDead = true; 
 			}
 
 			if (Gdx.input.isKeyPressed(Keys.LEFT) || Gdx.input.isKeyPressed(Keys.RIGHT) || Gdx.input.isKeyPressed(Keys.UP) || Gdx.input.isKeyPressed(Keys.DOWN)) {
