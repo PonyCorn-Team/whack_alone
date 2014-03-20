@@ -130,6 +130,7 @@ public class GameScreen implements Screen, InputProcessor {
 		Rectangle r = oStart.getByType(RectangleMapObject.class).first().getRectangle();
 		p = new Player(game.manager.get("game/01.png", Texture.class), new Coord(r.x, r.y), Ammo.palet, new Sprite(game.manager.get("game/palet.png", Texture.class)));
 		p.setMoving(walkAnimation);
+		p.setDying(game.manager.get("game/dead.png", Texture.class));
 
 		// create the raindrops array and spawn the first raindrop
 		// raindrops = new Array<Rectangle>();
@@ -139,6 +140,7 @@ public class GameScreen implements Screen, InputProcessor {
 		loadSoundPaf();
 		p.deadSound = game.manager.get("game/dead.wav", Sound.class);
 		Texture stand = game.manager.get("game/02.png", Texture.class);
+		Texture dead = game.manager.get("game/dead2.png", Texture.class);
 		Sprite bullet = new Sprite(game.manager.get("game/bullet.png", Texture.class));
 
 		Texture walkerSheet = new Texture(Gdx.files.internal("game/spriteenemy.png")); // #9
@@ -150,12 +152,15 @@ public class GameScreen implements Screen, InputProcessor {
 				walkFrames2[index++] = tmp2[i][j];
 			}
 		}
-		Animation walk = new Animation(0.025f, walkFrames); // #11
-
+		Animation walk = new Animation(0.025f, walkFrames2); // #11
+		Enemy e = null;
 		for (RectangleMapObject spawn : spawnEnnemies.getByType(RectangleMapObject.class)) {
 			r = spawn.getRectangle();
-			enemy.add(new Enemy(stand, new Coord(r.x, r.y), Ammo.bullet, bullet));
-			p.setMoving(walk);
+			e = new Enemy(stand, new Coord(r.x, r.y), Ammo.bullet, bullet);
+			e.setMoving(walk);
+			e.deadSound = p.deadSound;
+			e.setDying(dead);
+			enemy.add(e);
 		}
 
 		// bounceSound = game.manager.get("game/bounce.wav", Sound.class);
@@ -255,7 +260,9 @@ public class GameScreen implements Screen, InputProcessor {
 		// one
 		Array<IColidable> colidables = new Array<IColidable>();
 		colidables.add(p);
-		colidables.addAll(enemy);
+		for (Enemy e : enemy)
+			if(!e.dead)
+				colidables.add(e);
 		for (IColidable p : projectiles) {
 			colidables.add(p);
 		}
@@ -295,18 +302,19 @@ public class GameScreen implements Screen, InputProcessor {
 
 		Array<ICharacter> characteres = new Array<ICharacter>();
 		characteres.add(p);
-
+		for (Enemy e : enemy)
+			if(!e.dead)
+				characteres.add(e);
 		for (Projectile p : projectiles) {
 			for (ICharacter c : characteres) {
 				Rectangle rectangle = c.getRectangle();
-				if (Intersector.overlaps(rectangle, p.getRectangle())) {
+				if (p.localCoord != null && Intersector.overlaps(rectangle, p.getRectangle())) {
 					c.colisionProjectile(p);
 					p.colisionCharacter(c);
 				}
 			}
 			if ((p.ammoType != Ammo.palet && p.speed < 0) || p.localCoord == null)
 				projectiles.removeValue(p, true);
-
 		}
 
 	}

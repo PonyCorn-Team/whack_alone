@@ -1,5 +1,6 @@
 package com.ponycornteam.core.objects;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.ponycornteam.core.objects.Projectile.Ammo;
@@ -25,7 +26,13 @@ public class Enemy extends Character {
 
 	@Override
 	public void colisionProjectile(Projectile projectile) {
-		// TODO Auto-generated method stub
-		
+		if (projectile.owner != this && projectile.owner != null && projectile.speed > 0) {
+			saying = "shit i'm dead!";
+			saycolor = Color.RED;
+			sayingCount = 10.0;
+			dead = true;
+			if (deadSound != null)
+				deadSound.play();
+		}
 	}
 }
