@@ -63,8 +63,7 @@ abstract class Character implements ICharacter {
 	}
 
 	public void setAngle(double destX, double destY) {
-		localCoord.angle = com.ponycornteam.tools.Trigo.angleCalc(localCoord.x
-				+ width / 2, localCoord.y + heigth / 2, destX, destY);
+		localCoord.angle = com.ponycornteam.tools.Trigo.angleCalc(localCoord.x + width / 2, localCoord.y + heigth / 2, destX, destY);
 	}
 
 	public void setStanding(Texture text) {
@@ -92,8 +91,7 @@ abstract class Character implements ICharacter {
 		sp.setPosition((float) localCoord.x, (float) localCoord.y);
 		sp.setRotation((float) -localCoord.angle);
 		sp.draw(batch);
-		if (!saying.isEmpty() && sayingCount>0)
-		{
+		if (!saying.isEmpty() && sayingCount > 0) {
 			drawText(batch, saying, saycolor);
 			sayingCount -= Gdx.graphics.getDeltaTime();
 		}
@@ -110,15 +108,13 @@ abstract class Character implements ICharacter {
 	protected void drawText(SpriteBatch batch, String txt, Color color) {
 
 		BitmapFont font = new BitmapFont();
-		font.setColor(color!=null?color:Color.WHITE);
+		font.setColor(color != null ? color : Color.WHITE);
 		font.setScale(1f);
-		font.draw(batch, txt, (float) (localCoord.x + width + 10),
-				(float) (localCoord.y + heigth + 10));
+		font.draw(batch, txt, (float) (localCoord.x + width + 10), (float) (localCoord.y + heigth + 10));
 	}
 
 	public Rectangle getRectangle() {
-		return new Rectangle((float) localCoord.x, (float) localCoord.y,
-				(float) standing.getWidth(), (float) standing.getHeight());
+		return new Rectangle((float) localCoord.x, (float) localCoord.y, (float) standing.getWidth(), (float) standing.getHeight());
 	}
 
 	public void colisionObject(direction dir) {

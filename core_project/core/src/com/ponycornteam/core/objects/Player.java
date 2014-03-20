@@ -41,9 +41,9 @@ public class Player extends Character {
 	public void shoot() {
 		if (ammo.size > 0) {
 			Projectile pro = ammo.pop();
-			pro.localCoord = new Coord(0,0);
+			pro.localCoord = new Coord(0, 0);
 			pro.localCoord.x = localCoord.x + Math.cos(-localCoord.angle / 180 * Math.PI) * (standing.getWidth());
-			pro.localCoord.y = localCoord.y + Math.sin(-localCoord.angle / 180 * Math.PI) * (standing.getHeight()/2);
+			pro.localCoord.y = localCoord.y + Math.sin(-localCoord.angle / 180 * Math.PI) * (standing.getHeight() / 2);
 			pro.localCoord.angle = localCoord.angle;
 			pro.speed = 600;
 			pro.owner = this;

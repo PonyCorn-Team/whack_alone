@@ -91,9 +91,7 @@ public class GameScreen implements Screen, InputProcessor {
 		Texture.setEnforcePotImages(false);
 
 		walkSheet = new Texture(Gdx.files.internal("game/spriteplayer.png")); // #9
-		TextureRegion[][] tmp = TextureRegion.split(walkSheet,
-				walkSheet.getWidth() / FRAME_COLS, walkSheet.getHeight()
-						/ FRAME_ROWS); // #10
+		TextureRegion[][] tmp = TextureRegion.split(walkSheet, walkSheet.getWidth() / FRAME_COLS, walkSheet.getHeight() / FRAME_ROWS); // #10
 		walkFrames = new TextureRegion[FRAME_COLS * FRAME_ROWS];
 		int index = 0;
 		for (int i = 0; i < FRAME_ROWS; i++) {
@@ -120,9 +118,7 @@ public class GameScreen implements Screen, InputProcessor {
 
 		// create a Rectangle to logically represent the bucket
 
-		p = new Player(game.manager.get("game/01.png", Texture.class),
-				new Coord(800 / 2 - 64 / 2, 20), Ammo.palet, new Sprite(
-						game.manager.get("game/palet.png", Texture.class)));
+		p = new Player(game.manager.get("game/01.png", Texture.class), new Coord(800 / 2 - 64 / 2, 20), Ammo.palet, new Sprite(game.manager.get("game/palet.png", Texture.class)));
 		p.setText("hello", Color.CYAN, 2.0);
 		player = p;
 		player.setMoving(walkAnimation);
@@ -184,14 +180,12 @@ public class GameScreen implements Screen, InputProcessor {
 		// all drops
 		game.batch.begin();
 
-		game.font.draw(game.batch, "FPS: " + Gdx.graphics.getFramesPerSecond(),
-				0, 480);
+		game.font.draw(game.batch, "FPS: " + Gdx.graphics.getFramesPerSecond(), 0, 480);
 		// if(isMoving)
 		// game.batch.draw(currentFrame, player.x, player.y);
 		// else
 		// game.batch.draw(playerImage, player.x, player.y);
-		game.batch.draw(cursorImage, posX - (cursorWidth / 2), game.HEIGH
-				- posY - (cursorHeight / 2));
+		game.batch.draw(cursorImage, posX - (cursorWidth / 2), game.HEIGH - posY - (cursorHeight / 2));
 
 		// font.draw(game.batch, "hello", (float)(p.getX() + p.getWidth() +10),
 		// (float)(p.getY() + p.getHeigh()+10));
@@ -223,36 +217,20 @@ public class GameScreen implements Screen, InputProcessor {
 		}
 
 		for (IColidable c : colidables) {
-			for (RectangleMapObject rectangleObject : objects
-					.getByType(RectangleMapObject.class)) {
+			for (RectangleMapObject rectangleObject : objects.getByType(RectangleMapObject.class)) {
 				Rectangle rectangle = rectangleObject.getRectangle();
 				if (Intersector.overlaps(rectangle, c.getRectangle())) {
-					if (c.getRectangle().x < rectangle.x + rectangle.width
-							&& c.getRectangle().x + c.getRectangle().width > rectangle.x
-							// Angie specialy for you a fucking mega over
-							// ternaire condition
-							// Beacause ternaire is not for fucking NOOB
-							// The following fucking over mega ternaire of the
-							// world dead who kill every NOOB and your fucking
-							// brain too
-							// check if the width under the colide box is
-							// greater than the height under the colide box
-							&& (((c.getRectangle().x > rectangle.x) ? c
-									.getRectangle().x : rectangle.x) - ((c
-									.getRectangle().x
-									+ c.getRectangle().getWidth() < rectangle.x
-									+ rectangle.width) ? c.getRectangle().x
-									+ c.getRectangle().getWidth() : rectangle.x
-									+ rectangle.width)) < (((c.getRectangle().y > rectangle.y) ? c
-									.getRectangle().y : rectangle.y) - ((c
-									.getRectangle().y
-									+ c.getRectangle().getHeight() < rectangle.y
-									+ rectangle.height) ? c.getRectangle().y
-									+ c.getRectangle().getHeight()
-										: rectangle.y + rectangle.height))) {
-						if (c.getRectangle().y + c.getRectangle().height > rectangle.y
-								&& c.getRectangle().y + c.getRectangle().height > rectangle.y
-										+ rectangle.height) {
+					if (c.getRectangle().x < rectangle.x + rectangle.width && c.getRectangle().x + c.getRectangle().width > rectangle.x
+					// Angie specialy for you a fucking mega over
+					// ternaire condition
+					// Beacause ternaire is not for fucking NOOB
+					// The following fucking over mega ternaire of the
+					// world dead who kill every NOOB and your fucking
+					// brain too
+					// check if the width under the colide box is
+					// greater than the height under the colide box
+					&& (((c.getRectangle().x > rectangle.x) ? c.getRectangle().x : rectangle.x) - ((c.getRectangle().x + c.getRectangle().getWidth() < rectangle.x + rectangle.width) ? c.getRectangle().x + c.getRectangle().getWidth() : rectangle.x + rectangle.width)) < (((c.getRectangle().y > rectangle.y) ? c.getRectangle().y : rectangle.y) - ((c.getRectangle().y + c.getRectangle().getHeight() < rectangle.y + rectangle.height) ? c.getRectangle().y + c.getRectangle().getHeight() : rectangle.y + rectangle.height))) {
+						if (c.getRectangle().y + c.getRectangle().height > rectangle.y && c.getRectangle().y + c.getRectangle().height > rectangle.y + rectangle.height) {
 							c.colisionObject(direction.bot);
 							c.setY(rectangle.y + rectangle.height);
 						} else {
@@ -260,10 +238,7 @@ public class GameScreen implements Screen, InputProcessor {
 							c.setY(rectangle.y - c.getRectangle().height);
 						}
 
-					} else if (c.getRectangle().x > rectangle.x
-							&& c.getRectangle().x < rectangle.x
-									+ rectangle.width
-							&& c.getRectangle().x + c.getRectangle().width > rectangle.x) {
+					} else if (c.getRectangle().x > rectangle.x && c.getRectangle().x < rectangle.x + rectangle.width && c.getRectangle().x + c.getRectangle().width > rectangle.x) {
 						c.colisionObject(direction.left);
 						c.setX(rectangle.x + rectangle.width);
 					} else {
@@ -285,8 +260,7 @@ public class GameScreen implements Screen, InputProcessor {
 					p.colisionCharacter(c);
 				}
 			}
-			if ((p.ammoType != Ammo.palet && p.speed < 0)
-					|| p.localCoord == null)
+			if ((p.ammoType != Ammo.palet && p.speed < 0) || p.localCoord == null)
 				projectiles.removeValue(p, true);
 
 		}
@@ -305,16 +279,13 @@ public class GameScreen implements Screen, InputProcessor {
 	}
 
 	@Override
-	public void hide() {
-	}
+	public void hide() {}
 
 	@Override
-	public void pause() {
-	}
+	public void pause() {}
 
 	@Override
-	public void resume() {
-	}
+	public void resume() {}
 
 	@Override
 	public void dispose() {
@@ -380,23 +351,20 @@ public class GameScreen implements Screen, InputProcessor {
 	private void loadSoundAie() {
 		p.sAie = new Array<Sound>();
 		for (int i = 1; i <= 21; i++)
-			p.sAie.add(game.manager.get("game/aie/aie" + i + ".wav",
-					Sound.class));
+			p.sAie.add(game.manager.get("game/aie/aie" + i + ".wav", Sound.class));
 
 	}
 
 	private void loadSoundAieWoman() {
 		p.sAie = new Array<Sound>();
 		for (int i = 1; i <= 3; i++)
-			p.sAie.add(game.manager.get("game/womanaie/womanaie" + i + ".wav",
-					Sound.class));
+			p.sAie.add(game.manager.get("game/womanaie/womanaie" + i + ".wav", Sound.class));
 	}
 
 	private void loadSoundPaf() {
 		p.sPaf = new Array<Sound>();
 		for (int i = 1; i <= 4; i++)
-			p.sPaf.add(game.manager.get("game/paf/paf" + i + ".mp3",
-					Sound.class));
+			p.sPaf.add(game.manager.get("game/paf/paf" + i + ".mp3", Sound.class));
 	}
 
 	private void imputEvent() {
@@ -414,25 +382,18 @@ public class GameScreen implements Screen, InputProcessor {
 
 			}
 
-			if (Gdx.input.isKeyPressed(Keys.LEFT)
-					|| Gdx.input.isKeyPressed(Keys.RIGHT)
-					|| Gdx.input.isKeyPressed(Keys.UP)
-					|| Gdx.input.isKeyPressed(Keys.DOWN)) {
+			if (Gdx.input.isKeyPressed(Keys.LEFT) || Gdx.input.isKeyPressed(Keys.RIGHT) || Gdx.input.isKeyPressed(Keys.UP) || Gdx.input.isKeyPressed(Keys.DOWN)) {
 				if (Gdx.input.isKeyPressed(Keys.LEFT))
-					player.setX(player.getX() - 200
-							* Gdx.graphics.getDeltaTime());
+					player.setX(player.getX() - 200 * Gdx.graphics.getDeltaTime());
 
 				if (Gdx.input.isKeyPressed(Keys.RIGHT))
-					player.setX(player.getX() + 200
-							* Gdx.graphics.getDeltaTime());
+					player.setX(player.getX() + 200 * Gdx.graphics.getDeltaTime());
 
 				if (Gdx.input.isKeyPressed(Keys.DOWN))
-					player.setY(player.getY() - 200
-							* Gdx.graphics.getDeltaTime());
+					player.setY(player.getY() - 200 * Gdx.graphics.getDeltaTime());
 
 				if (Gdx.input.isKeyPressed(Keys.UP))
-					player.setY(player.getY() + 200
-							* Gdx.graphics.getDeltaTime());
+					player.setY(player.getY() + 200 * Gdx.graphics.getDeltaTime());
 
 				isMoving = true;
 				return;
