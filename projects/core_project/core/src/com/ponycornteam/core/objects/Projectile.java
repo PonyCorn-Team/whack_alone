@@ -17,19 +17,21 @@ public class Projectile implements IDrawable, IColidable, IColidableProjectile {
 	public Sound shootSound;
 	public Sound bounceSound;
 	public Boolean isDestroy = false;
-	public static enum Ammo {palet, bullet};
+
+	public static enum Ammo {
+		palet, bullet
+	};
+
 	public Ammo ammoType = Ammo.bullet;
 
 	private void avancer(float deltaTime) {
 		if (speed > 0) {
-			localCoord.x += Math.cos(-localCoord.angle / 180 * Math.PI) * speed
-					* deltaTime;
-			localCoord.y += Math.sin(-localCoord.angle / 180 * Math.PI) * speed
-					* deltaTime;
+			localCoord.x += Math.cos(-localCoord.angle / 180 * Math.PI) * speed * deltaTime;
+			localCoord.y += Math.sin(-localCoord.angle / 180 * Math.PI) * speed * deltaTime;
 			speed -= 75 * deltaTime;
 		}
 	}
-	
+
 	public void draw(SpriteBatch batch, float stateTime) {
 		avancer(Gdx.graphics.getDeltaTime());
 		texture.setPosition((float) localCoord.x, (float) localCoord.y);
@@ -40,37 +42,34 @@ public class Projectile implements IDrawable, IColidable, IColidableProjectile {
 	@Override
 	public void setX(double x) {
 		localCoord.x = x;
-		
+
 	}
 
 	@Override
 	public void setY(double y) {
 		localCoord.y = y;
-		
+
 	}
 
 	@Override
 	public Rectangle getRectangle() {
-		return new Rectangle((float)localCoord.x,(float)localCoord.y,(float)texture.getWidth(),(float)texture.getHeight());
+		return new Rectangle((float) localCoord.x, (float) localCoord.y, (float) texture.getWidth(), (float) texture.getHeight());
 	}
 
 	@Override
 	public void colisionObject(direction dir) {
-		if(ammoType == Ammo.palet)
-		{
-			speed /=2;
-			localCoord.angle = ((dir == direction.top||dir == direction.bot)?360:180)-localCoord.angle;
-		}
-		else
+		if (ammoType == Ammo.palet) {
+			speed /= 2;
+			localCoord.angle = ((dir == direction.top || dir == direction.bot) ? 360 : 180) - localCoord.angle;
+		} else
 			speed = 0;
 	}
 
 	@Override
 	public void colisionCharacter(ICharacter character) {
-		if(owner != character)
-		{
-			if(ammoType == Ammo.palet)
-				speed /=2;
+		if (owner != character) {
+			if (ammoType == Ammo.palet)
+				speed /= 2;
 			else
 				speed = 0;
 		}
