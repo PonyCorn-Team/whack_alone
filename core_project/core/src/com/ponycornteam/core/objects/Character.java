@@ -24,7 +24,14 @@ abstract class Character implements ICharacter {
 	protected Double sayingCount = 0.0;
 	protected Color saycolor = null;
 	protected Array<Projectile> ammo = new Array<Projectile>();
-
+	protected static Array<String> pshooting = new Array<String>();
+	protected static Array<String> pkill = new Array<String>();
+	protected static Array<String> pdead = new Array<String>();
+	protected static Array<String> eshooting = new Array<String>();
+	protected static Array<String> ekill = new Array<String>();
+	protected static Array<String> edead = new Array<String>();
+	protected static Array<String> eloosefocus = new Array<String>();
+	
 	public Array<Sound> sAie;
 	public Array<Sound> sPaf;
 
@@ -118,9 +125,15 @@ abstract class Character implements ICharacter {
 	}
 
 	public void colisionObject(direction dir) {
-		saying = "can't pass here";
+		/*saying = "can't pass here";
 		saycolor = Color.ORANGE;
-		sayingCount = 5.0;
+		sayingCount = 5.0;*/
 
+	}
+	
+	public void setText(String txt, Color txtColor, Double timeShowing) {
+		saying = txt;
+		saycolor = txtColor;
+		sayingCount = (timeShowing > 0) ? timeShowing : 5;
 	}
 }
