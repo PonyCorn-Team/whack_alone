@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.ponycornteam.tools.Coord;
 
-public interface ICharacter extends IDrawable, IColidable {
+public interface ICharacter extends IDrawable, IColidable, IColidableCharacter {
 	public void setCoord(Coord newCoord);
 
 	public Coord getCoord();

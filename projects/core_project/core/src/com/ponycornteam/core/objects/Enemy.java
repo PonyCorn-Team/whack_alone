@@ -11,4 +11,10 @@ public class Enemy extends Character {
 		width = stand.getWidth();
 		heigth = stand.getHeight();
 	}
+
+	@Override
+	public void colisionProjectile(Projectile projectile) {
+		// TODO Auto-generated method stub
+		
+	}
 }

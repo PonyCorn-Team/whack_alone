@@ -32,8 +32,12 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.ponycornteam.core.objects.ICharacter;
 import com.ponycornteam.core.objects.IColidable;
+import com.ponycornteam.core.objects.IColidableCharacter;
+import com.ponycornteam.core.objects.IColidableProjectile;
+import com.ponycornteam.core.objects.IDrawable;
 import com.ponycornteam.core.objects.Player;
 import com.ponycornteam.core.objects.Projectile;
+import com.ponycornteam.core.objects.Projectile.Ammo;
 import com.ponycornteam.tools.Coord;
 import com.ponycornteam.tools.Coord.direction;
 
@@ -49,8 +53,7 @@ public class GameScreen implements Screen, InputProcessor {
 
 	private Music music;
 
-	private Player p;
-	Projectile pro;
+	private Player p = null;
 
 	Sound dropSound;
 	Music rainMusic;
@@ -80,15 +83,15 @@ public class GameScreen implements Screen, InputProcessor {
 	private TiledMapTileLayer collisionObjectLayer;
 	private MapObjects objects;
 
+	public static Array<Projectile> projectiles = new Array<Projectile>();
+
 	public GameScreen(final Core gam) {
 		this.game = gam;
 
 		Texture.setEnforcePotImages(false);
 
 		walkSheet = new Texture(Gdx.files.internal("game/spriteplayer.png")); // #9
-		TextureRegion[][] tmp = TextureRegion.split(walkSheet,
-				walkSheet.getWidth() / FRAME_COLS, walkSheet.getHeight()
-						/ FRAME_ROWS); // #10
+		TextureRegion[][] tmp = TextureRegion.split(walkSheet, walkSheet.getWidth() / FRAME_COLS, walkSheet.getHeight() / FRAME_ROWS); // #10
 		walkFrames = new TextureRegion[FRAME_COLS * FRAME_ROWS];
 		int index = 0;
 		for (int i = 0; i < FRAME_ROWS; i++) {
@@ -114,17 +117,12 @@ public class GameScreen implements Screen, InputProcessor {
 		rainMusic.setLooping(true);
 
 		// create a Rectangle to logically represent the bucket
-		p = new Player(game.manager.get("game/01.png", Texture.class),
-				new Coord(800 / 2 - 64 / 2, 20));
+
+		p = new Player(game.manager.get("game/01.png", Texture.class), new Coord(800 / 2 - 64 / 2, 20), Ammo.palet, new Sprite(game.manager.get("game/palet.png", Texture.class)));
 		p.setText("hello", Color.CYAN, 2.0);
 		player = p;
-		pro = new Projectile();
 		player.setMoving(walkAnimation);
-		pro.localCoord = new Coord(0, 480, 340);
-		pro.speed = 120;
-		pro.texture = new Sprite(game.manager.get("game/palet.png",
-				Texture.class));
-		pro.owner = p;
+
 		// create the raindrops array and spawn the first raindrop
 		// raindrops = new Array<Rectangle>();
 
@@ -150,116 +148,123 @@ public class GameScreen implements Screen, InputProcessor {
 	}
 
 	@Override
-    public void render(float delta) {
-        // clear the screen with a dark blue color. The
-        // arguments to glClearColor are the red, green
-        // blue and alpha component in the range [0,1]
-        // of the color to be used to clear the screen.
-        Gdx.gl.glClearColor(0.2f, 0.6f, 0.8f, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+	public void render(float delta) {
+		// clear the screen with a dark blue color. The
+		// arguments to glClearColor are the red, green
+		// blue and alpha component in the range [0,1]
+		// of the color to be used to clear the screen.
+		Gdx.gl.glClearColor(0.2f, 0.6f, 0.8f, 1);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        // tell the camera to update its matrices.
-        camera.update();
+		// tell the camera to update its matrices.
+		camera.update();
 
-        // tell the SpriteBatch to render in the
-        // coordinate system specified by the camera.
-        game.batch.setProjectionMatrix(camera.combined);
+		// tell the SpriteBatch to render in the
+		// coordinate system specified by the camera.
+		game.batch.setProjectionMatrix(camera.combined);
 
-        stateTime += Gdx.graphics.getDeltaTime();           // #15
-        currentFrame = walkAnimation.getKeyFrame(stateTime, true);  
-        
-        player.setAngle(posX, game.HEIGH-posY);
-        
-        renderer.setView(camera);
+		stateTime += Gdx.graphics.getDeltaTime(); // #15
+		currentFrame = walkAnimation.getKeyFrame(stateTime, true);
+
+		player.setAngle(posX, game.HEIGH - posY);
+
+		renderer.setView(camera);
 		renderer.render();
-        /*spritePlayer = (isMoving) ? new Sprite(currentFrame) : new Sprite(player.getTexture());
-        spritePlayer.setPosition((float)player.getX(), (float)player.getY());
-        spritePlayer.setRotation((float) player.getAngle());*/
-        // begin a new batch and draw the bucket and
-        // all drops
-        game.batch.begin();
-        
+		/*
+		 * spritePlayer = (isMoving) ? new Sprite(currentFrame) : new
+		 * Sprite(player.getTexture());
+		 * spritePlayer.setPosition((float)player.getX(), (float)player.getY());
+		 * spritePlayer.setRotation((float) player.getAngle());
+		 */
+		// begin a new batch and draw the bucket and
+		// all drops
+		game.batch.begin();
 
-        
-        game.font.draw(game.batch, "FPS: " + Gdx.graphics.getFramesPerSecond(), 0, 480);
-//        if(isMoving)
-//        	game.batch.draw(currentFrame, player.x, player.y);  
-//        else
-//        	game.batch.draw(playerImage, player.x, player.y);
-        game.batch.draw(cursorImage, posX - (cursorWidth / 2), game.HEIGH - posY - (cursorHeight / 2));
-        
-        //font.draw(game.batch, "hello", (float)(p.getX() + p.getWidth() +10), (float)(p.getY() + p.getHeigh()+10));
-        /*spritePlayer.draw(game.batch);
-        spritePlayer = new Sprite(pro.texture);*/
-        pro.draw(game.batch, stateTime);
-        /*spritePlayer.setPosition((float)pro.localCoord.x, (float)pro.localCoord.y);
-        spritePlayer.draw(game.batch);*/
-        p.draw(game.batch, stateTime, isMoving);
-        
-        game.batch.end();
+		game.font.draw(game.batch, "FPS: " + Gdx.graphics.getFramesPerSecond(), 0, 480);
+		// if(isMoving)
+		// game.batch.draw(currentFrame, player.x, player.y);
+		// else
+		// game.batch.draw(playerImage, player.x, player.y);
+		game.batch.draw(cursorImage, posX - (cursorWidth / 2), game.HEIGH - posY - (cursorHeight / 2));
 
-      
-        imputEvent(); 
-       // System.out.println("isMoving = " + isMoving );
-        //fpsLogger.log();
-        
-     // there are several other types, Rectangle is probably the most common one
-        Array<IColidable> colidables = new Array<IColidable>();
-        colidables.add(player);
-        colidables.add(pro);
-        
-        for (IColidable c : colidables) {
-        	for (RectangleMapObject rectangleObject : objects.getByType(RectangleMapObject.class)) {
-                Rectangle rectangle = rectangleObject.getRectangle();
-                if (Intersector.overlaps(rectangle, c.getRectangle())) {
-                	if(c.getRectangle().x<rectangle.x+rectangle.width && c.getRectangle().x+c.getRectangle().width>rectangle.x
-                			//Angie specialy for you a fucking mega over ternaire condition
-                			// Beacause ternaire is not for fucking NOOB
-                			// The following fucking over mega ternaire of the world dead who kill every NOOB and your fucking brain too
-                			// check if the width under the colide box is greater than the height under the colide box
-                			&& (((c.getRectangle().x>rectangle.x)?c.getRectangle().x:rectangle.x)-((c.getRectangle().x+c.getRectangle().getWidth()<rectangle.x+rectangle.width)?c.getRectangle().x+c.getRectangle().getWidth():rectangle.x+rectangle.width))<(((c.getRectangle().y>rectangle.y)?c.getRectangle().y:rectangle.y)-((c.getRectangle().y+c.getRectangle().getHeight()<rectangle.y+rectangle.height)?c.getRectangle().y+c.getRectangle().getHeight():rectangle.y+rectangle.height)))
-                	{
-                		if(c.getRectangle().y+c.getRectangle().height>rectangle.y && c.getRectangle().y+c.getRectangle().height>rectangle.y+rectangle.height)
-                		{
-                			c.colisionObject(direction.bot);
-                			c.setY(rectangle.y + rectangle.height);
-                		}
-                		else
-                		{
-                			c.colisionObject(direction.top);
-                			c.setY(rectangle.y - c.getRectangle().height);	
-                		}
+		// font.draw(game.batch, "hello", (float)(p.getX() + p.getWidth() +10),
+		// (float)(p.getY() + p.getHeigh()+10));
+		/*
+		 * spritePlayer.draw(game.batch); spritePlayer = new
+		 * Sprite(pro.texture);
+		 */
+		for (IDrawable d : projectiles) {
+			d.draw(game.batch, stateTime);
+		}
+		/*
+		 * spritePlayer.setPosition((float)pro.localCoord.x,
+		 * (float)pro.localCoord.y); spritePlayer.draw(game.batch);
+		 */
+		p.draw(game.batch, stateTime, isMoving);
 
-                	}
-                	else
-            			if(c.getRectangle().x>rectangle.x && c.getRectangle().x<rectangle.x+rectangle.width && c.getRectangle().x+c.getRectangle().width>rectangle.x)
-            			{
-            				c.colisionObject(direction.left);
-            				c.setX(rectangle.x + rectangle.width);	
-            			} 
-                		else
-                		{
-                			c.colisionObject(direction.right);
-                			c.setX(rectangle.x - c.getRectangle().width);
-                		}
-                }
-            }
+		game.batch.end();
+
+		imputEvent();
+		// System.out.println("isMoving = " + isMoving );
+		// fpsLogger.log();
+
+		// there are several other types, Rectangle is probably the most common
+		// one
+		Array<IColidable> colidables = new Array<IColidable>();
+		colidables.add(player);
+		for (IColidable p : projectiles) {
+			colidables.add(p);
 		}
 
-        Array<Projectile> projectiles = new Array<Projectile>();
-        projectiles.add(pro);
-        Array<ICharacter> characteres = new Array<ICharacter>();
-        characteres.add(player);
-        
-        for (Projectile p : projectiles) {
-        	for (ICharacter c : characteres) {
-                Rectangle rectangle = c.getRectangle();
-                if (Intersector.overlaps(rectangle, p.getRectangle())){
-                		c.colisionProjectile(p);
-                }
-            }
+		for (IColidable c : colidables) {
+			for (RectangleMapObject rectangleObject : objects.getByType(RectangleMapObject.class)) {
+				Rectangle rectangle = rectangleObject.getRectangle();
+				if (Intersector.overlaps(rectangle, c.getRectangle())) {
+					if (c.getRectangle().x < rectangle.x + rectangle.width && c.getRectangle().x + c.getRectangle().width > rectangle.x
+					// Angie specialy for you a fucking mega over
+					// ternaire condition
+					// Beacause ternaire is not for fucking NOOB
+					// The following fucking over mega ternaire of the
+					// world dead who kill every NOOB and your fucking
+					// brain too
+					// check if the width under the colide box is
+					// greater than the height under the colide box
+					&& (((c.getRectangle().x > rectangle.x) ? c.getRectangle().x : rectangle.x) - ((c.getRectangle().x + c.getRectangle().getWidth() < rectangle.x + rectangle.width) ? c.getRectangle().x + c.getRectangle().getWidth() : rectangle.x + rectangle.width)) < (((c.getRectangle().y > rectangle.y) ? c.getRectangle().y : rectangle.y) - ((c.getRectangle().y + c.getRectangle().getHeight() < rectangle.y + rectangle.height) ? c.getRectangle().y + c.getRectangle().getHeight() : rectangle.y + rectangle.height))) {
+						if (c.getRectangle().y + c.getRectangle().height > rectangle.y && c.getRectangle().y + c.getRectangle().height > rectangle.y + rectangle.height) {
+							c.colisionObject(direction.bot);
+							c.setY(rectangle.y + rectangle.height);
+						} else {
+							c.colisionObject(direction.top);
+							c.setY(rectangle.y - c.getRectangle().height);
+						}
+
+					} else if (c.getRectangle().x > rectangle.x && c.getRectangle().x < rectangle.x + rectangle.width && c.getRectangle().x + c.getRectangle().width > rectangle.x) {
+						c.colisionObject(direction.left);
+						c.setX(rectangle.x + rectangle.width);
+					} else {
+						c.colisionObject(direction.right);
+						c.setX(rectangle.x - c.getRectangle().width);
+					}
+				}
+			}
 		}
-    }
+
+		Array<ICharacter> characteres = new Array<ICharacter>();
+		characteres.add(player);
+
+		for (Projectile p : projectiles) {
+			for (ICharacter c : characteres) {
+				Rectangle rectangle = c.getRectangle();
+				if (Intersector.overlaps(rectangle, p.getRectangle())) {
+					c.colisionProjectile(p);
+					p.colisionCharacter(c);
+				}
+			}
+			if ((p.ammoType != Ammo.palet && p.speed < 0) || p.localCoord == null)
+				projectiles.removeValue(p, true);
+
+		}
+	}
 
 	@Override
 	public void resize(int width, int height) {
@@ -274,16 +279,13 @@ public class GameScreen implements Screen, InputProcessor {
 	}
 
 	@Override
-	public void hide() {
-	}
+	public void hide() {}
 
 	@Override
-	public void pause() {
-	}
+	public void pause() {}
 
 	@Override
-	public void resume() {
-	}
+	public void resume() {}
 
 	@Override
 	public void dispose() {
@@ -349,66 +351,58 @@ public class GameScreen implements Screen, InputProcessor {
 	private void loadSoundAie() {
 		p.sAie = new Array<Sound>();
 		for (int i = 1; i <= 21; i++)
-			p.sAie.add(game.manager.get("game/aie/aie" + i + ".wav",
-					Sound.class));
+			p.sAie.add(game.manager.get("game/aie/aie" + i + ".wav", Sound.class));
 
 	}
 
 	private void loadSoundAieWoman() {
 		p.sAie = new Array<Sound>();
 		for (int i = 1; i <= 3; i++)
-			p.sAie.add(game.manager.get("game/womanaie/womanaie" + i + ".wav",
-					Sound.class));
+			p.sAie.add(game.manager.get("game/womanaie/womanaie" + i + ".wav", Sound.class));
 	}
 
 	private void loadSoundPaf() {
 		p.sPaf = new Array<Sound>();
 		for (int i = 1; i <= 4; i++)
-			p.sPaf.add(game.manager.get("game/paf/paf" + i + ".mp3",
-					Sound.class));
+			p.sPaf.add(game.manager.get("game/paf/paf" + i + ".mp3", Sound.class));
 	}
 
 	private void imputEvent() {
+		if (p != null) {
+			if (Gdx.input.isKeyPressed(Keys.ESCAPE)) {
+				Gdx.app.exit();
+				return;
+			}
 
-		if (Gdx.input.isKeyPressed(Keys.ESCAPE)) {
-			Gdx.app.exit();
+			if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+				p.shoot();
+			}
+
+			if (Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
+
+			}
+
+			if (Gdx.input.isKeyPressed(Keys.LEFT) || Gdx.input.isKeyPressed(Keys.RIGHT) || Gdx.input.isKeyPressed(Keys.UP) || Gdx.input.isKeyPressed(Keys.DOWN)) {
+				if (Gdx.input.isKeyPressed(Keys.LEFT))
+					player.setX(player.getX() - 200 * Gdx.graphics.getDeltaTime());
+
+				if (Gdx.input.isKeyPressed(Keys.RIGHT))
+					player.setX(player.getX() + 200 * Gdx.graphics.getDeltaTime());
+
+				if (Gdx.input.isKeyPressed(Keys.DOWN))
+					player.setY(player.getY() - 200 * Gdx.graphics.getDeltaTime());
+
+				if (Gdx.input.isKeyPressed(Keys.UP))
+					player.setY(player.getY() + 200 * Gdx.graphics.getDeltaTime());
+
+				isMoving = true;
+				return;
+
+			}
+
+			isMoving = false;
 			return;
 		}
-
-		if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
-			pro.localCoord.x = p.localCoord.x;
-			pro.localCoord.y = p.localCoord.y;
-			pro.localCoord.angle = p.localCoord.angle;
-			pro.speed = 600;
-		}
-
-		if (Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
-
-		}
-
-		if (Gdx.input.isKeyPressed(Keys.LEFT)
-				|| Gdx.input.isKeyPressed(Keys.RIGHT)
-				|| Gdx.input.isKeyPressed(Keys.UP)
-				|| Gdx.input.isKeyPressed(Keys.DOWN)) {
-			if (Gdx.input.isKeyPressed(Keys.LEFT))
-				player.setX(player.getX() - 200 * Gdx.graphics.getDeltaTime());
-
-			if (Gdx.input.isKeyPressed(Keys.RIGHT))
-				player.setX(player.getX() + 200 * Gdx.graphics.getDeltaTime());
-
-			if (Gdx.input.isKeyPressed(Keys.DOWN))
-				player.setY(player.getY() - 200 * Gdx.graphics.getDeltaTime());
-
-			if (Gdx.input.isKeyPressed(Keys.UP))
-				player.setY(player.getY() + 200 * Gdx.graphics.getDeltaTime());
-
-			isMoving = true;
-			return;
-
-		}
-
-		isMoving = false;
-		return;
 	}
 
 }

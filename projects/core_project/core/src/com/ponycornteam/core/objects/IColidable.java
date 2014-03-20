@@ -11,6 +11,4 @@ public interface IColidable {
 	public Rectangle getRectangle();
 
 	public void colisionObject(direction dir);
-
-	public void colisionProjectile(Projectile projectile);
 }
