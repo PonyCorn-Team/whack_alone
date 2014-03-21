@@ -70,8 +70,8 @@ public class Player extends Character {
 			sayingCount = 10.0;
 			dead = true;
 			projectile.owner.setText(ekill.random(), Color.ORANGE, 2.5);
-			if (deadSound != null)
-				deadSound.play();
+			if (sAieWoman != null)
+				sAieWoman.random().play();
 		} else {
 			if (projectile.ammoType == Ammo.palet && projectile.speed < 250) {
 				saying = "OH YEAH! FUCKING PUCK";
