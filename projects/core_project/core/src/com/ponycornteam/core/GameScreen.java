@@ -401,16 +401,16 @@ public class GameScreen implements Screen, InputProcessor {
 	}
 
 	private void loadSoundAie() {
-		p.sAie = new Array<Sound>();
+		Enemy.sAie = new Array<Sound>();
 		for (int i = 1; i <= 21; i++)
-			p.sAie.add(game.manager.get("game/aie/aie" + i + ".wav", Sound.class));
+			Enemy.sAie.add(game.manager.get("game/aie/aie" + i + ".wav", Sound.class));
 
 	}
 
 	private void loadSoundAieWoman() {
-		p.sAie = new Array<Sound>();
+		Player.sAieWoman = new Array<Sound>();
 		for (int i = 1; i <= 3; i++)
-			p.sAie.add(game.manager.get("game/womanaie/womanaie" + i + ".wav", Sound.class));
+			Player.sAieWoman.add(game.manager.get("game/womanaie/womanaie" + i + ".wav", Sound.class));
 	}
 
 	private void loadSoundPaf() {
