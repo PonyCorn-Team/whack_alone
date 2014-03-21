@@ -43,8 +43,8 @@ public class Enemy extends Character {
 			sayingCount = 10.0;
 			dead = true;
 			projectile.owner.setText(pkill.random(), Color.ORANGE, 2.0);
-			if (deadSound != null)
-				deadSound.play();
+			if (sAie != null)
+				sAie.random().play();
 		}
 	}
 

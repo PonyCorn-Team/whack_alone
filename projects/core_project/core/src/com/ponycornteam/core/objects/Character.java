@@ -32,7 +32,8 @@ abstract class Character implements ICharacter {
 	protected static Array<String> edead = new Array<String>();
 	protected static Array<String> eloosefocus = new Array<String>();
 	
-	public Array<Sound> sAie;
+	public static Array<Sound> sAie;
+	public static Array<Sound> sAieWoman;
 	public Array<Sound> sPaf;
 
 	public Sound deadSound;
