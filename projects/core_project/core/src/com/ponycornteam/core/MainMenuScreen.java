@@ -54,16 +54,16 @@ public class MainMenuScreen implements Screen {
         skin = new Skin( skinFile );
         
         
-        music = game.manager.get("menu/menu.wav", Music.class);
+        music = game.manager.get("music/548914_Road-Rash---Grass-V.mp3", Music.class);
         music.setLooping(true);
-        
+
         
         Image background = new Image(new TextureRegion(game.manager.get("menu/menu.png", Texture.class)));
         background.setFillParent(true);
         stage.addActor(background); 
         
 		final float buttonX = ( game.WIDTH - BUTTON_WIDTH ) / 2;
-		 float currentY = 100;
+		 float currentY = 200;
 	       // label "welcome"
      //   Label welcomeLabel = new Label( "Nom du jeu", skin );
     //    welcomeLabel.setX(( (  game.WIDTH - welcomeLabel.getWidth() ) / 2 ));
@@ -73,20 +73,35 @@ public class MainMenuScreen implements Screen {
         // button "start game"
         TextButton startGameButton = new TextButton( "Start game", skin );
         startGameButton.setX(50);
-        startGameButton.setY(100);
+        startGameButton.setY(200);
         startGameButton.setWidth(BUTTON_WIDTH);
         startGameButton.setHeight(BUTTON_HEIGHT);
         stage.addActor( startGameButton );
  
         // button "options"
-        TextButton highScoreButton = new TextButton( "High Score", skin );
+   /*     TextButton highScoreButton = new TextButton( "High Score", skin );
         highScoreButton.setX(50);
         highScoreButton.setY(currentY-= BUTTON_HEIGHT + BUTTON_SPACING);
         highScoreButton.setWidth(BUTTON_WIDTH);
         highScoreButton.setHeight(BUTTON_HEIGHT);
-        stage.addActor( highScoreButton );
+        stage.addActor( highScoreButton ); */
  
-
+        // button "options"
+        TextButton htpButton = new TextButton( "How To Play", skin );
+        htpButton.setX(50);
+        htpButton.setY(currentY-= BUTTON_HEIGHT + BUTTON_SPACING);
+        htpButton.setWidth(BUTTON_WIDTH);
+        htpButton.setHeight(BUTTON_HEIGHT);
+        stage.addActor( htpButton );
+ 
+        TextButton creditButton = new TextButton( "Credits", skin );
+        creditButton.setX(50);
+        creditButton.setY(currentY-= BUTTON_HEIGHT + BUTTON_SPACING);
+        creditButton.setWidth(BUTTON_WIDTH);
+        creditButton.setHeight(BUTTON_HEIGHT);
+        stage.addActor( creditButton );
+ 
+        
         startGameButton.addListener(new ChangeListener() {
 			public void changed (ChangeEvent event, Actor actor) {
 				game.setScreen(new GameScreen(game));
@@ -94,6 +109,19 @@ public class MainMenuScreen implements Screen {
 			}
 		});
         
+        htpButton.addListener(new ChangeListener() {
+			public void changed (ChangeEvent event, Actor actor) {
+				game.setScreen(new HowToPlayScreen(game));
+				dispose(); 
+			}
+		});
+        
+        creditButton.addListener(new ChangeListener() {
+			public void changed (ChangeEvent event, Actor actor) {
+				game.setScreen(new CreditsScreen(game));
+				dispose(); 
+			}
+		});
         
         
     }

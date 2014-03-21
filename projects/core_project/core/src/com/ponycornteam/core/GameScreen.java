@@ -57,9 +57,6 @@ public class GameScreen implements Screen, InputProcessor {
 
 	private Player p = null;
 
-	Sound dropSound;
-	Music rainMusic;
-
 	BitmapFont font;
 
 	int posX = 0, playerX = 0;
@@ -121,10 +118,6 @@ public class GameScreen implements Screen, InputProcessor {
 		oExit = map.getLayers().get("oexit").getObjects();
 		oStart = map.getLayers().get("ostart").getObjects();
 
-		// Chargement des sons et musiques
-		dropSound = game.manager.get("data/drop.wav", Sound.class);
-		rainMusic = game.manager.get("data/rain.mp3", Music.class);
-		rainMusic.setLooping(true);
 
 		// create a Rectangle to logically represent the bucket
 		Rectangle r = oStart.getByType(RectangleMapObject.class).first().getRectangle();
@@ -135,6 +128,10 @@ public class GameScreen implements Screen, InputProcessor {
 		// create the raindrops array and spawn the first raindrop
 		// raindrops = new Array<Rectangle>();
 
+        music = game.manager.get("music/500694_Unnatural-Selection.mp3", Music.class);
+        music.setLooping(true);
+		
+		
 		loadSoundAie();
 		loadSoundAieWoman();
 		loadSoundPaf();
@@ -331,7 +328,7 @@ public class GameScreen implements Screen, InputProcessor {
 	public void show() {
 		// start the playback of the background music
 		// when the screen is shown
-		rainMusic.play();
+		music.play(); 
 	}
 
 	@Override
@@ -346,8 +343,7 @@ public class GameScreen implements Screen, InputProcessor {
 	@Override
 	public void dispose() {
 		cursorImage.dispose();
-		dropSound.dispose();
-		rainMusic.dispose();
+		music.dispose();
 	}
 
 	@Override
