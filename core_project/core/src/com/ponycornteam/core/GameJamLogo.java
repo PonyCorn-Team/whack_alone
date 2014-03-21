@@ -10,8 +10,9 @@ public class GameJamLogo implements Screen {
 
 	final Core game;
 	private Texture splash; 
+	private Texture splash2; 
     OrthographicCamera camera;
-
+    boolean isLogo = true; 
     public GameJamLogo(final Core gam) {
     	game = gam;
 
@@ -19,25 +20,38 @@ public class GameJamLogo implements Screen {
         camera.setToOrtho(false, game.WIDTH, game.HEIGH);
 
         splash  =  game.manager.get("splash/logo.png", Texture.class);
+        splash2 = game.manager.get("splash/wall.png", Texture.class);
     }
     
 	@Override
 	public void render(float delta) {
 
 
-   	    Gdx.gl.glClearColor(0, 0, 0, 1);
+   	    Gdx.gl.glClearColor(95/255, 5/255, 5/255, 1);
         Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
 
         game.batch.begin();
-        game.batch.draw(splash, 0, 0, 800, 480);
+        game.batch.draw(splash, 0, 0, 800,480);
         game.batch.end();
 
         if (Gdx.input.isTouched()) {
+        	if(!isLogo){
             game.setScreen(new SplashScreen(game));
-            dispose();
+        	}
+        	else{
+        		splash = splash2; 
+        		isLogo = false; 
+        		try {
+					Thread.sleep(100);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+        	}
+            //dispose();
         }
 		
 	}
