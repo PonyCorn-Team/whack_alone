@@ -61,10 +61,14 @@ public class LoadingScreen implements Screen {
     	game.manager.load("game/map/maptest.tmx", TiledMap.class);
     	game.manager.load("game/map/map1.tmx", TiledMap.class);
     	
-    	game.manager.load("data/bucket.png", Texture.class);
-    	game.manager.load("data/droplet.png",Texture.class);
-    	game.manager.load("data/drop.wav",Sound.class);
-    	game.manager.load("data/rain.mp3",Music.class);
+    	//Music
+    	
+    	game.manager.load("music/390033_Propeller_Daze.mp3",Music.class);
+    	game.manager.load("music/413303_Industrial_Intrusio.mp3",Music.class);
+    	game.manager.load("music/500694_Unnatural-Selection.mp3",Music.class);
+    	game.manager.load("music/520659_Jungle-Vibes.mp3",Music.class);
+    	game.manager.load("music/548914_Road-Rash---Grass-V.mp3",Music.class);
+    	game.manager.load("music/556797_Crimson-Crisis.mp3",Music.class);
     	
     	
     	Texture.setEnforcePotImages(false);

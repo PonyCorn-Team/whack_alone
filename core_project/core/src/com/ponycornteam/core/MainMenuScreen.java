@@ -54,9 +54,9 @@ public class MainMenuScreen implements Screen {
         skin = new Skin( skinFile );
         
         
-        music = game.manager.get("menu/menu.wav", Music.class);
+        music = game.manager.get("music/548914_Road-Rash---Grass-V.mp3", Music.class);
         music.setLooping(true);
-        
+
         
         Image background = new Image(new TextureRegion(game.manager.get("menu/menu.png", Texture.class)));
         background.setFillParent(true);
