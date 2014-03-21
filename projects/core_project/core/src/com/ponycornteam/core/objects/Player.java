@@ -4,10 +4,10 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.Array;
 import com.ponycornteam.core.GameScreen;
 import com.ponycornteam.core.objects.Projectile.Ammo;
 import com.ponycornteam.tools.Coord;
+import com.ponycornteam.tools.Coord.direction;
 
 public class Player extends Character {
 	public Player(Texture standing, Coord coord, Ammo ammotype, Sprite texture) {
@@ -52,9 +52,9 @@ public class Player extends Character {
 	public void shoot() {
 		if (ammo.size > 0) {
 			Projectile pro = ammo.pop();
-			pro.localCoord = new Coord(0, 0);
-			pro.localCoord.x = localCoord.x + Math.cos(-localCoord.angle / 180 * Math.PI) * (standing.getWidth());
-			pro.localCoord.y = localCoord.y + Math.sin(-localCoord.angle / 180 * Math.PI) * (standing.getHeight() / 2);
+			pro.localCoord = new Coord(localCoord.x + standing.getWidth() / 2, localCoord.y + standing.getHeight() / 2);
+			/*pro.localCoord.x +=  Math.sin(-localCoord.angle / 360 * Math.PI) * (20);
+			pro.localCoord.y +=  Math.cos(-localCoord.angle / 360 * Math.PI) * (20);*/
 			pro.localCoord.angle = localCoord.angle;
 			pro.speed = 600;
 			pro.owner = this;
@@ -81,5 +81,10 @@ public class Player extends Character {
 				ammo.add(projectile);
 			}
 		}
+	}
+
+	@Override
+	public void colisionObject(direction dir) {
+		
 	}
 }

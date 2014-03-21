@@ -97,7 +97,10 @@ abstract class Character implements ICharacter {
 			sp = standing;
 		sp.setPosition((float) localCoord.x, (float) localCoord.y);
 		sp.setRotation((float) -localCoord.angle);
-		sp.draw(batch);
+		if (dead && dying != null)
+			sp.draw(batch,0.5f);
+		else
+			sp.draw(batch);
 		if (!saying.isEmpty() && sayingCount > 0) {
 			drawText(batch, saying, saycolor);
 			sayingCount -= Gdx.graphics.getDeltaTime();
@@ -122,13 +125,6 @@ abstract class Character implements ICharacter {
 
 	public Rectangle getRectangle() {
 		return new Rectangle((float) localCoord.x, (float) localCoord.y, (float) standing.getWidth(), (float) standing.getHeight());
-	}
-
-	public void colisionObject(direction dir) {
-		/*saying = "can't pass here";
-		saycolor = Color.ORANGE;
-		sayingCount = 5.0;*/
-
 	}
 	
 	public void setText(String txt, Color txtColor, Double timeShowing) {

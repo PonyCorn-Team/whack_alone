@@ -238,8 +238,11 @@ public class GameScreen implements Screen, InputProcessor {
 		for (IDrawable d : projectiles)
 			d.draw(game.batch, stateTime);
 
-		for (IDrawable e : enemy)
+		for (Enemy e : enemy)
+		{
+			e.enemyIA(p);
 			e.draw(game.batch, stateTime);
+		}
 
 		/*
 		 * spritePlayer.setPosition((float)pro.localCoord.x,
@@ -313,7 +316,7 @@ public class GameScreen implements Screen, InputProcessor {
 					p.colisionCharacter(c);
 				}
 			}
-			if ((p.ammoType != Ammo.palet && p.speed < 0) || p.localCoord == null)
+			if ((p.ammoType != Ammo.palet && p.speed <= 0) || p.localCoord == null)
 				projectiles.removeValue(p, true);
 		}
 
