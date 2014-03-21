@@ -71,7 +71,7 @@ public class GameOverScreen  implements Screen {
         
         score = 999;
         // label "welcome"
-        Label scorelbl = new Label( "Score : " + score, skin );
+   /*     Label scorelbl = new Label( "Score : " + score, skin );
         scorelbl.setX(( (  game.WIDTH - scorelbl.getWidth() ) / 2 )  );
         scorelbl.setY(( currentY + 125 ));
         stage.addActor( scorelbl );
@@ -84,7 +84,7 @@ public class GameOverScreen  implements Screen {
         final TextField textfield = new TextField("", skin);
         textfield.setX(( (  game.WIDTH - textfield.getWidth() ) / 2 ) + pseudolbl.getWidth() );
         textfield.setY(( currentY + 100 ));
-        stage.addActor( textfield );
+        stage.addActor( textfield ); */
         
         // button "start game"
         TextButton tryAgainButton = new TextButton( "Try again", skin );
@@ -106,7 +106,7 @@ public class GameOverScreen  implements Screen {
 
         tryAgainButton.addListener(new ChangeListener() {
 			public void changed (ChangeEvent event, Actor actor) {
-				String pseudo = textfield.getText();
+				//String pseudo = textfield.getText();
 
 				game.setScreen(new GameScreen(game));
 				dispose();
@@ -116,7 +116,7 @@ public class GameOverScreen  implements Screen {
         menuButton.addListener(new ChangeListener() {
 			public void changed (ChangeEvent event, Actor actor) {
 				
-				String pseudo = textfield.getText();
+				//String pseudo = textfield.getText();
 				game.setScreen(new MainMenuScreen(game));
 				dispose();
 			}
