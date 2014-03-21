@@ -32,6 +32,7 @@ public class LoadingScreen implements Screen {
 
     	
     	game.manager.load("splash/wall.png",Texture.class);
+    	game.manager.load("splash/logo.png",Texture.class);
     	//Menu 
     	game.manager.load("menu/menu.wav",Music.class);
     	game.manager.load("menu/menu.png",Texture.class);
@@ -79,7 +80,7 @@ public class LoadingScreen implements Screen {
 	public void render(float delta) {
 
 		if(game.manager.update()) {
-			game.setScreen(new SplashScreen(game));
+			game.setScreen(new GameJamLogo(game));
 	      }
 		game.batch.begin();
 		empty.draw(game.batch, 40, 225, 720, 30);
